@@ -21,9 +21,9 @@
     "remirror": "1.0.0-next.60"
   },
   "devDependencies": {
-    "@types/react": "^17.0.1",
-    "@types/react-dom": "^17.0.0",
-    "@types/refractor": "^3.0.0"
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/refractor": "^3"
   },
   "@remirror": {
     "tsconfigs": {

@@ -51,9 +51,7 @@
     "emojibase-data": "^6.1.0",
     "emojibase-regex": "^5.1.0",
     "escape-string-regexp": "^4.0.0",
-    "idb-keyval": "^5.0.2",
-    "match-sorter": "^6.1.0",
-    "svgmoji": "^3.0.0",
+    "svgmoji": "^3.1.0",
     "type-fest": "^0.21.2"
   },
   "devDependencies": {

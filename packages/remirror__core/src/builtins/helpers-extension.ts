@@ -169,7 +169,11 @@ export class HelpersExtension extends PlainExtension {
   }
 
   @helper()
-  getTextBetween(from: number, to: number, doc: ProsemirrorNode): Helper<string> {
+  getTextBetween(
+    from: number,
+    to: number,
+    doc: ProsemirrorNode = this.store.getState().doc,
+  ): Helper<string> {
     return doc.textBetween(from, to, LEAF_NODE_REPLACING_CHARACTER, NULL_CHARACTER);
   }
 

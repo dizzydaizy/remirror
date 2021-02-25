@@ -9,7 +9,7 @@ import type {
   RemoveFlavoring,
   Shape,
   StringKey,
-} from './base-types';
+} from './base';
 
 type StaticAnnotation = Flavoring<'StaticAnnotation'>;
 type DynamicAnnotation = Flavoring<'DynamicAnnotation'>;

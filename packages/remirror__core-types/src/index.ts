@@ -1,5 +1,5 @@
 export * from './annotation-types';
-export * from './base-types';
+export * from './base';
 export * from './core-types';
 export * from './props-types';
 export type {

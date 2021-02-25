@@ -1,0 +1,37 @@
+{
+  "name": "Remirror Dev Tools",
+  "description": "Custom developer tools from Devtools-DS",
+  "devtools_page": "panel/startup.html",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "version": null,
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background/background.js"]
+  },
+  "applications": {
+    "gecko": {
+      "id": "{b60ed719-4042-4f3f-92f0-5bfda2089d6d}"
+    }
+  },
+  "browser_action": {
+    "default_icon": {
+      "128": "assets/icon_128.png"
+    },
+    "default_title": "Remirror Dev Tools",
+    "default_popup": "popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content.js"],
+      "all_frames": true,
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": ["tabs", "storage", "webNavigation", "http://*/*", "https://*/*"],
+  "web_accessible_resources": ["runtime/runtime.js", "popup/assets/*", "panel/assets/*"],
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  }
+}

@@ -199,9 +199,7 @@
     "ignore": [
       "@remirror/pm",
       "@types/prettier",
-      "@types/refractor",
       "prettier",
-      "refractor",
       "@remirror/core",
       "@remirror/messages",
       "@remirror/theme"
@@ -557,6 +555,7 @@
       "@remirror/core",
       "@remirror/i18n",
       "@remirror/messages",
+      "@remirror/pm",
       "@remirror/theme"
     ],
     "running": false,
@@ -847,14 +846,6 @@
     "limit": "50 KB",
     "path": "support/actions/dist/remirror-actions.browser.esm.js",
     "ignore": ["@remirror/core-helpers"],
-    "running": false,
-    "gzip": true
-  },
-  {
-    "name": "scripts",
-    "limit": "50 KB",
-    "path": "support/scripts/dist/scripts.esm.js",
-    "ignore": ["@remirror/core-helpers", "@remirror/icons", "@remirror/playground"],
     "running": false,
     "gzip": true
   },
