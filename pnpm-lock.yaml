@@ -271,6 +271,7 @@ importers:
       '@remirror/extension-codemirror5': link:../../packages/remirror__extension-codemirror5
       '@remirror/extension-heading': link:../../packages/remirror__extension-heading
       '@remirror/extension-react-component': link:../../packages/remirror__extension-react-component
+      '@remirror/extension-react-tables': link:../../packages/remirror__extension-react-tables
       '@remirror/extension-tables': link:../../packages/remirror__extension-tables
       '@remirror/extension-text-color': link:../../packages/remirror__extension-text-color
       '@remirror/messages': link:../../packages/remirror__messages
@@ -308,6 +309,7 @@ importers:
       '@remirror/extension-codemirror5': 1.0.0-next.60
       '@remirror/extension-heading': 1.0.0-next.60
       '@remirror/extension-react-component': 1.0.0-next.60
+      '@remirror/extension-react-tables': 1.0.0-next.60
       '@remirror/extension-tables': 1.0.0-next.60
       '@remirror/extension-text-color': 0.0.0
       '@remirror/messages': 0.0.0
@@ -1592,6 +1594,48 @@ importers:
       '@remirror/react-utils': 1.0.0-next.60
       '@types/react': ^17.0.1
       react: ^17.0.1
+  packages/remirror__extension-react-tables:
+    dependencies:
+      '@babel/runtime': 7.13.8
+      '@linaria/core': 3.0.0-beta.1
+      '@remirror/core': link:../remirror__core
+      '@remirror/core-utils': link:../remirror__core-utils
+      '@remirror/extension-positioner': link:../remirror__extension-positioner
+      '@remirror/extension-react-component': link:../remirror__extension-react-component
+      '@remirror/extension-tables': link:../remirror__extension-tables
+      '@remirror/messages': link:../remirror__messages
+      '@remirror/preset-core': link:../remirror__preset-core
+      '@remirror/react': link:../remirror__react
+      '@remirror/react-hooks': link:../remirror__react-hooks
+      '@remirror/theme': link:../remirror__theme
+      jsx-dom: 7.0.0-beta.1
+    devDependencies:
+      '@emotion/css': 11.1.3
+      '@remirror/pm': link:../remirror__pm
+      '@types/react': 17.0.2
+      '@types/react-dom': 17.0.1
+      react: 17.0.1
+      react-dom: 17.0.1_react@17.0.1
+    specifiers:
+      '@babel/runtime': ^7.13.7
+      '@emotion/css': ^11.1.3
+      '@linaria/core': ^3.0.0-beta.1
+      '@remirror/core': 1.0.0-next.60
+      '@remirror/core-utils': 1.0.0-next.60
+      '@remirror/extension-positioner': 1.0.0-next.60
+      '@remirror/extension-react-component': 1.0.0-next.60
+      '@remirror/extension-tables': 1.0.0-next.60
+      '@remirror/messages': 0.0.0
+      '@remirror/pm': 1.0.0-next.60
+      '@remirror/preset-core': 1.0.0-next.60
+      '@remirror/react': 1.0.0-next.60
+      '@remirror/react-hooks': 1.0.0-next.60
+      '@remirror/theme': 1.0.0-next.60
+      '@types/react': ^17.0.1
+      '@types/react-dom': ^17.0.0
+      jsx-dom: ^7.0.0-beta.1
+      react: ^17.0.1
+      react-dom: ^17.0.1
   packages/remirror__extension-search:
     dependencies:
       '@babel/runtime': 7.13.8
@@ -3111,6 +3155,9 @@ packages:
     bundledDependencies:
       - jsonschema
       - semver
+    dependencies:
+      jsonschema: 1.4.0
+      semver: 7.3.4
     dev: false
     engines:
       node: '>= 10.13.0 <13 || >=13.7.0'
@@ -3134,6 +3181,7 @@ packages:
       - semver
     dependencies:
       '@aws-cdk/cloud-assembly-schema': 1.91.0
+      semver: 7.3.4
     dev: false
     engines:
       node: '>= 10.13.0 <13 || >=13.7.0'
@@ -3148,6 +3196,8 @@ packages:
   /@aws-cdk/yaml-cfn/1.91.0:
     bundledDependencies:
       - yaml
+    dependencies:
+      yaml: 1.10.0
     dev: false
     engines:
       node: '>= 10.13.0 <13 || >=13.7.0'
@@ -20219,6 +20269,7 @@ packages:
     resolution:
       integrity: sha512-hk/69oAeaIzchq/v3lS50PXuzn5O2ynldopMC+SWBql7J2WtdptfB9dy8Y7+Og5rPkTCpn83zTiO8FMcqlXJ/g==
   /jsondiffpatch/0.4.1:
+    bundledDependencies: []
     dependencies:
       chalk: 2.4.2
       diff-match-patch: 1.0.5
@@ -20254,6 +20305,10 @@ packages:
   /jsonify/0.0.0:
     resolution:
       integrity: sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
+  /jsonschema/1.4.0:
+    dev: false
+    resolution:
+      integrity: sha512-/YgW6pRMr6M7C+4o8kS+B/2myEpHCrxO4PEWnqJNBFMjn7EWXqlQ4tGwL6xTHeRplwuZmcAncdvfOad1nT2yMw==
   /jsonwebtoken/8.5.1:
     dependencies:
       jws: 3.2.2
@@ -20290,6 +20345,12 @@ packages:
       node: '>=4.0'
     resolution:
       integrity: sha512-EIsmt3O3ljsU6sot/J4E1zDRxfBNrhjyf/OKjlydwgEimQuznlM4Wv7U+ueONJMyEn1WRE0K8dhi3dVAXYT24Q==
+  /jsx-dom/7.0.0-beta.1:
+    dependencies:
+      csstype: 3.0.7
+    dev: false
+    resolution:
+      integrity: sha512-smAb5SMvif+LbFqyBMLZqiX5XliIfdhtDCP2FFHkdPDS+7uC+lY9wrSe4r53q/47vo6fBWqYbJ6QPUvZiVS+gw==
   /jszip/3.6.0:
     dependencies:
       lie: 3.3.0

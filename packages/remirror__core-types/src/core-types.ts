@@ -232,6 +232,15 @@ export interface NodeExtensionSpec
    * should be inserted.
    */
   toDOM?: (node: NodeWithAttributes) => DOMOutputSpec;
+
+  /**
+   * By default, gap cursor are only allowed in places where the default content
+   * node (in the schema content constraints) is a textblock node. You can
+   * customize this by adding an `allowGapCursor` property to your node specs:
+   * if it's true, gap cursor are allowed everywhere in that node, if it's false
+   * they are never allowed.
+   */
+  allowGapCursor?: boolean; // TODO: remove this when this PR is merged: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/51496/
 }
 
 export type NodeSpecOverride = Pick<

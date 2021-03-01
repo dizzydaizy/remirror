@@ -24,6 +24,9 @@
       "path": "../../../packages/remirror__extension-react-component/src"
     },
     {
+      "path": "../../../packages/remirror__extension-react-tables/src"
+    },
+    {
       "path": "../../../packages/remirror__extension-tables/src"
     },
     {

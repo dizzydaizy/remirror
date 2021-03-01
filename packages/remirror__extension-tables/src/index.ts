@@ -5,3 +5,4 @@ export {
   TableHeaderCellExtension,
   TableRowExtension,
 } from './table-extensions';
+export type { TableSchemaSpec } from './table-utils';
