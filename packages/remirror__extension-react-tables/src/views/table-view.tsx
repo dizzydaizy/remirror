@@ -320,9 +320,8 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
     return this.node.attrs as TableNodeAttrs;
   }
 
-  ignoreMutation(record: ProsemirrorMutationRecord): boolean {
+  ignoreMutation(): boolean {
     return true;
-    // return record.type === 'attributes';
   }
 
   destroy(): void {
@@ -331,8 +330,6 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
     document.removeEventListener('mousemove', this.handleMouseMove);
   }
 }
-
-type ProsemirrorMutationRecord = MutationRecord | { type: 'selection'; target: Element };
 
 // TODO: this function's performance should be very bad. Maybe we should use some kind of DOM-diff algorithm.
 export function replaceChildren(parent: HTMLElement, children: HTMLElement[]): void {

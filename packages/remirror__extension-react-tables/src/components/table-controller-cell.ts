@@ -1,8 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { h } from 'jsx-dom/min';
 import { EditorView, findParentNodeOfType, FindProsemirrorNodeResult } from '@remirror/core';
-import { Node as ProsemirrorNode } from '@remirror/pm/model';
-import { Decoration } from '@remirror/pm/view';
 
 import { ClassName, ControllerType } from '../const';
 import { getCellAxis, getControllerType, newControllerEvents } from '../utils/controller';
@@ -12,18 +10,14 @@ import TableInsertionButtonTrigger from './table-insertion-button-trigger';
 import TableInsertionMark from './table-insertion-mark';
 
 export interface TableControllerCellProps {
-  node: ProsemirrorNode;
   view: EditorView;
   getPos: () => number;
-  decorations: Decoration[];
   contentDOM: HTMLElement;
 }
 
 const TableControllerCell = ({
-  node,
   view,
   getPos,
-  decorations,
   contentDOM,
 }: TableControllerCellProps): HTMLElement => {
   const getAxis = (): CellAxis => {

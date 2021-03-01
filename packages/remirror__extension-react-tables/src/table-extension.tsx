@@ -197,13 +197,8 @@ export class TableControllerCellExtension extends NodeExtension {
   }
 
   createNodeViews(): NodeViewMethod {
-    return (
-      node: ProsemirrorNode,
-      view: EditorView,
-      getPos: boolean | (() => number),
-      decorations: Decoration[],
-    ) => {
-      return new TableControllerCellView(node, view, getPos as () => number, decorations);
+    return (node: ProsemirrorNode, view: EditorView, getPos: boolean | (() => number)) => {
+      return new TableControllerCellView(node, view, getPos as () => number);
     };
   }
 

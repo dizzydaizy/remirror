@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { EditorView, ResolvedPos, Transaction } from '@remirror/core';
+import { EditorView, FindProsemirrorNodeResult, ResolvedPos, Transaction } from '@remirror/core';
 import { Fragment, Node as ProsemirrorNode } from '@remirror/pm/model';
 import { CellSelection, TableMap } from '@remirror/pm/tables';
 
@@ -62,45 +62,44 @@ export function newControllerEvents({
     return {
       onClick: () => selectRow(view, findTable, getAxis().row),
       onMouseOver: () => previewSelectRow(view, findTable, getAxis().row),
-      onMouseOut: () => previewLeaveRow(view, findTable, getAxis().row),
+      onMouseOut: () => previewLeaveRow(view, findTable),
     };
   } else if (controllerType === ControllerType.COLUMN_CONTROLLER) {
     return {
       onClick: () => selectColumn(view, findTable, getAxis().col),
       onMouseOver: () => previewSelectColumn(view, findTable, getAxis().col),
-      onMouseOut: () => previewLeaveColumn(view, findTable, getAxis().col),
+      onMouseOut: () => previewLeaveColumn(view, findTable),
     };
   }
 
   return {
-    onClick: () => selectTable(view, findTable, 0),
-    onMouseOver: () => previewSelectTable(view, findTable, 0),
-    onMouseOut: () => previewLeaveTable(view, findTable, 0),
+    onClick: () => selectTable(view, findTable),
+    onMouseOver: () => previewSelectTable(view, findTable),
+    onMouseOut: () => previewLeaveTable(view, findTable),
   };
 }
 
-function decoExecFunc(
-  func: (view: EditorView, tablePos: number, map: TableMap, index: number) => void,
+function onlyTableFound<Extra extends unknown[]>(
+  func: (view: EditorView, table: FindProsemirrorNodeResult, ...extra: Extra) => void,
 ) {
-  return (view: EditorView, findTable: FindTable, index: number) => {
+  return (view: EditorView, findTable: FindTable, ...extra: Extra) => {
     const found = findTable();
 
     if (!found) {
       return;
     }
 
-    const tablePos = found.pos;
-    const map = TableMap.get(found.node);
-    return func(view, tablePos, map, index);
+    return func(view, found, ...extra);
   };
 }
 
-const selectRow = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
+const selectRow = onlyTableFound(
+  (view: EditorView, table: FindProsemirrorNodeResult, index: number) => {
+    const map = TableMap.get(table.node);
     const cellIndex = getCellIndex(map, index, 0);
     let tr = view.state.tr;
     const posInTable = map.map[cellIndex + 1]!;
-    const pos = tablePos + posInTable + 1;
+    const pos = table.pos + posInTable + 1;
     const $pos = tr.doc.resolve(pos);
     const selection = CellSelection.rowSelection($pos);
     tr = tr.setSelection(cellSelectionToSelection(selection));
@@ -108,12 +107,13 @@ const selectRow = decoExecFunc(
   },
 );
 
-const selectColumn = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
+const selectColumn = onlyTableFound(
+  (view: EditorView, table: FindProsemirrorNodeResult, index: number) => {
+    const map = TableMap.get(table.node);
     const cellIndex = getCellIndex(map, 0, index);
     let tr = view.state.tr;
     const posInTable = map.map[cellIndex]!;
-    const pos = tablePos + posInTable + 1;
+    const pos = table.pos + posInTable + 1;
     const $pos = tr.doc.resolve(pos);
     const selection = CellSelection.colSelection($pos);
     tr = tr.setSelection(cellSelectionToSelection(selection));
@@ -121,56 +121,44 @@ const selectColumn = decoExecFunc(
   },
 );
 
-const selectTable = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    if (map.map.length > 0) {
-      let tr = view.state.tr;
-      const firstCellPosInTable = map.map[0]!;
-      const lastCellPosInTable = map.map[map.map.length - 1]!;
-      const firstCellPos = tablePos + firstCellPosInTable + 1;
-      const lastCellPos = tablePos + lastCellPosInTable + 1;
-      const $firstCellPos = tr.doc.resolve(firstCellPos);
-      const $lastCellPos = tr.doc.resolve(lastCellPos);
-      const selection = new CellSelection($firstCellPos, $lastCellPos);
-      tr = tr.setSelection(cellSelectionToSelection(selection));
-      view.dispatch(tr);
-    }
-  },
-);
+const selectTable = onlyTableFound((view, table) => {
+  const map = TableMap.get(table.node);
 
-const previewSelectRow = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionRow: index }));
-  },
-);
+  if (map.map.length > 0) {
+    let tr = view.state.tr;
+    const firstCellPosInTable = map.map[0]!;
+    const lastCellPosInTable = map.map[map.map.length - 1]!;
+    const firstCellPos = table.pos + firstCellPosInTable + 1;
+    const lastCellPos = table.pos + lastCellPosInTable + 1;
+    const $firstCellPos = tr.doc.resolve(firstCellPos);
+    const $lastCellPos = tr.doc.resolve(lastCellPos);
+    const selection = new CellSelection($firstCellPos, $lastCellPos);
+    tr = tr.setSelection(cellSelectionToSelection(selection));
+    view.dispatch(tr);
+  }
+});
 
-const previewLeaveRow = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionRow: -1 }));
-  },
-);
+const previewSelectRow = onlyTableFound((view, table, index: number) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionRow: index }));
+});
 
-const previewSelectColumn = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionColumn: index }));
-  },
-);
-const previewLeaveColumn = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionColumn: -1 }));
-  },
-);
+const previewLeaveRow = onlyTableFound((view, table) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionRow: -1 }));
+});
 
-const previewSelectTable = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionTable: true }));
-  },
-);
-const previewLeaveTable = decoExecFunc(
-  (view: EditorView, tablePos: number, map: TableMap, index: number) => {
-    view.dispatch(setNodeAttrs(view.state.tr, tablePos, { previewSelectionTable: false }));
-  },
-);
+const previewSelectColumn = onlyTableFound((view, table, index: number) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionColumn: index }));
+});
+const previewLeaveColumn = onlyTableFound((view, table) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionColumn: -1 }));
+});
+
+const previewSelectTable = onlyTableFound((view, table) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionTable: true }));
+});
+const previewLeaveTable = onlyTableFound((view, table) => {
+  view.dispatch(setNodeAttrs(view.state.tr, table.pos, { previewSelectionTable: false }));
+});
 
 function getCellIndex(map: TableMap, rowIndex: number, colIndex: number): number {
   return map.width * rowIndex + colIndex;
