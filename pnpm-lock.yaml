@@ -1605,7 +1605,7 @@ importers:
       '@remirror/extension-tables': link:../remirror__extension-tables
       '@remirror/messages': link:../remirror__messages
       '@remirror/preset-core': link:../remirror__preset-core
-      '@remirror/react': link:../remirror__react
+      '@remirror/react-core': link:../remirror__react-core
       '@remirror/react-hooks': link:../remirror__react-hooks
       '@remirror/theme': link:../remirror__theme
       jsx-dom: 7.0.0-beta.1
@@ -1628,7 +1628,7 @@ importers:
       '@remirror/messages': 0.0.0
       '@remirror/pm': 1.0.0-next.60
       '@remirror/preset-core': 1.0.0-next.60
-      '@remirror/react': 1.0.0-next.60
+      '@remirror/react-core': 0.0.0
       '@remirror/react-hooks': 1.0.0-next.60
       '@remirror/theme': 1.0.0-next.60
       '@types/react': ^17.0.1

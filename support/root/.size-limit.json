@@ -524,7 +524,7 @@
       "@remirror/extension-tables",
       "@remirror/messages",
       "@remirror/preset-core",
-      "@remirror/react",
+      "@remirror/react-core",
       "@remirror/react-hooks",
       "@remirror/theme"
     ],

@@ -10,8 +10,8 @@ import {
   isPositionVisible,
   Positioner,
 } from '@remirror/extension-positioner';
+import { PositionerPortal } from '@remirror/extension-react-component';
 import { deleteColumn, deleteRow, isCellSelection, TableMap } from '@remirror/pm/tables';
-import { PositionerPortal } from '@remirror/react';
 import { usePositioner, UsePositionerReturn } from '@remirror/react-hooks';
 
 import { useRemirrorContext } from '../../../remirror__react-hooks/node_modules/@remirror/react-core/src';
