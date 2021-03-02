@@ -520,10 +520,10 @@
       "@remirror/core",
       "@remirror/core-utils",
       "@remirror/extension-positioner",
-      "@remirror/extension-react-component",
       "@remirror/extension-tables",
       "@remirror/messages",
       "@remirror/preset-core",
+      "@remirror/react-components",
       "@remirror/react-core",
       "@remirror/react-hooks",
       "@remirror/theme"

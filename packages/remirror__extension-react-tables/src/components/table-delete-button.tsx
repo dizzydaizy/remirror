@@ -12,7 +12,8 @@ import {
 } from '@remirror/extension-positioner';
 import { deleteColumn, deleteRow, isCellSelection, TableMap } from '@remirror/pm/tables';
 import { PositionerPortal } from '@remirror/react-components';
-import { usePositioner, UsePositionerReturn } from '@remirror/react-hooks';
+import type { UsePositionerReturn } from '@remirror/react-hooks';
+import { usePositioner } from '@remirror/react-hooks';
 
 import { useRemirrorContext } from '../../../remirror__react-hooks/node_modules/@remirror/react-core/src';
 import { CellSelectionType, getCellSelectionType } from '../utils/controller';
