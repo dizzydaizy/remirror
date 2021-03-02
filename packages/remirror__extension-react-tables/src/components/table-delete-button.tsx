@@ -1,9 +1,6 @@
 import React, { MouseEventHandler } from 'react';
-import {
-  findParentNodeOfType,
-  FindProsemirrorNodeResult,
-  isElementDomNode,
-} from '@remirror/core-utils';
+import type { FindProsemirrorNodeResult } from '@remirror/core';
+import { findParentNodeOfType, isElementDomNode } from '@remirror/core';
 import {
   defaultAbsolutePosition,
   hasStateChanged,
@@ -12,10 +9,10 @@ import {
 } from '@remirror/extension-positioner';
 import { deleteColumn, deleteRow, isCellSelection, TableMap } from '@remirror/pm/tables';
 import { PositionerPortal } from '@remirror/react-components';
+import { useRemirrorContext } from '@remirror/react-core';
 import type { UsePositionerReturn } from '@remirror/react-hooks';
 import { usePositioner } from '@remirror/react-hooks';
 
-import { useRemirrorContext } from '../../../remirror__react-hooks/node_modules/@remirror/react-core/src';
 import { CellSelectionType, getCellSelectionType } from '../utils/controller';
 import { mergeDOMRects } from '../utils/dom';
 

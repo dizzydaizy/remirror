@@ -26,9 +26,6 @@
       "path": "../../remirror__extension-positioner/src"
     },
     {
-      "path": "../../remirror__react-components/src"
-    },
-    {
       "path": "../../remirror__extension-tables/src"
     },
     {
@@ -36,6 +33,9 @@
     },
     {
       "path": "../../remirror__preset-core/src"
+    },
+    {
+      "path": "../../remirror__react-components/src"
     },
     {
       "path": "../../remirror__react-core/src"
