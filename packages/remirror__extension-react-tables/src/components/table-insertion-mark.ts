@@ -1,28 +1,28 @@
 import { css } from '@emotion/css';
-import { h } from 'jsx-dom/min';
+import { h } from 'jsx-dom';
 
 import { ControllerType } from '../const';
 
 const TableInsertionMark = ({
   controllerType,
-  markWidth = 4,
+  markRadius = 2,
   color = 'rgba(145, 145, 145, 0.589)',
 }: {
   controllerType: ControllerType;
-  markWidth?: number;
+  markRadius?: number;
   color?: string;
 }): HTMLElement[] => {
-  const result: HTMLElement[] = [];
+  const elements: HTMLElement[] = [];
 
   if (
     controllerType === ControllerType.ROW_CONTROLLER ||
     controllerType === ControllerType.CORNER_CONTROLLER
   ) {
-    result.push(
+    elements.push(
       h('div', {
         className: css`
           position: absolute;
-          bottom: -${0.5 * markWidth}px;
+          bottom: -${markRadius}px;
           left: -12px;
 
           width: 0px;
@@ -30,7 +30,7 @@ const TableInsertionMark = ({
           border-radius: 50%;
           border-style: solid;
           border-color: ${color};
-          border-width: ${0.5 * markWidth}px;
+          border-width: ${markRadius}px;
         `,
       }),
     );
@@ -40,11 +40,11 @@ const TableInsertionMark = ({
     controllerType === ControllerType.COLUMN_CONTROLLER ||
     controllerType === ControllerType.CORNER_CONTROLLER
   ) {
-    result.push(
+    elements.push(
       h('div', {
         className: css`
           position: absolute;
-          right: -${0.5 * markWidth}px;
+          right: -${markRadius}px;
           top: -12px;
 
           width: 0px;
@@ -52,13 +52,13 @@ const TableInsertionMark = ({
           border-radius: 50%;
           border-style: solid;
           border-color: ${color};
-          border-width: ${0.5 * markWidth}px;
+          border-width: ${markRadius}px;
         `,
       }),
     );
   }
 
-  return result;
+  return elements;
 };
 
 export default TableInsertionMark;

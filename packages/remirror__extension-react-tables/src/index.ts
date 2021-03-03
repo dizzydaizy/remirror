@@ -6,4 +6,4 @@ export {
   TableExtension,
   TableHeaderCellExtension,
   TableRowExtension,
-} from './table-extension';
+} from './table-extensions';

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'jsx-dom/min';
+import { HTMLAttributes } from 'jsx-dom';
 
 export type Events<T = Element> = Pick<HTMLAttributes<T>, EventName>;
 

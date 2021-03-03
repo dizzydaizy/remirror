@@ -1,4 +1,4 @@
-import { h } from 'jsx-dom/min';
+import { h } from 'jsx-dom';
 import { EditorView, NodeView } from '@remirror/core';
 import { Node as ProsemirrorNode } from '@remirror/pm/model';
 

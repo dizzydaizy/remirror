@@ -1,9 +1,9 @@
 import { css, cx } from '@emotion/css';
-import { h } from 'jsx-dom/min';
+import { h } from 'jsx-dom';
 import { EditorView, findParentNodeOfType, FindProsemirrorNodeResult } from '@remirror/core';
 
 import { ClassName, ControllerType } from '../const';
-import { getCellAxis, getControllerType, newControllerEvents } from '../utils/controller';
+import { createControllerEvents, getCellAxis, getControllerType } from '../utils/controller';
 import { controllerAutoHide } from '../utils/style';
 import { CellAxis } from '../utils/types';
 import TableInsertionButtonTrigger from './table-insertion-button-trigger';
@@ -70,7 +70,7 @@ const TableControllerCell = ({
   `;
 
   // TODO: controllerType maybe wrong
-  const events = newControllerEvents({ controllerType, view, getAxis, findTable });
+  const events = createControllerEvents({ controllerType, view, getAxis, findTable });
 
   const wrapper = h(
     'div',

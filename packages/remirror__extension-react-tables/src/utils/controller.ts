@@ -4,25 +4,26 @@ import { Fragment, Node as ProsemirrorNode } from '@remirror/pm/model';
 import { CellSelection, TableMap } from '@remirror/pm/tables';
 
 import { ControllerType } from '../const';
-import { TableNodeAttrs } from '../table-extension';
+import { ReactTableNodeAttrs } from '../table-extensions';
 import { Events } from '../utils/jsx';
 import { cellSelectionToSelection, setNodeAttrs } from '../utils/prosemirror';
 import { repeat } from './array';
 import { CellAxis, FindTable } from './types';
 
+export interface InjectControllersProps {
+  view: EditorView;
+  getMap: () => TableMap;
+  getPos: () => number;
+  tr: Transaction;
+  table: ProsemirrorNode;
+}
 export function injectControllers({
   view,
   getMap,
   getPos,
   tr,
-  oldTable,
-}: {
-  view: EditorView;
-  getMap: () => TableMap;
-  getPos: () => number;
-  tr: Transaction;
-  oldTable: ProsemirrorNode;
-}): Transaction {
+  table: oldTable,
+}: InjectControllersProps): Transaction {
   const schema = view.state.schema;
   const controllerCell = view.state.schema.nodes.tableControllerCell!.create();
   const headerControllerCells: ProsemirrorNode[] = repeat(controllerCell, getMap().width + 1);
@@ -41,13 +42,13 @@ export function injectControllers({
   const newRows = Fragment.fromArray(newRowsArray);
   const newTable = oldTable.copy(newRows);
 
-  (newTable.attrs as TableNodeAttrs).isControllersInjected = true;
+  (newTable.attrs as ReactTableNodeAttrs).isControllersInjected = true;
 
   const pos = getPos();
   return tr.replaceRangeWith(pos, pos + oldTable.nodeSize, newTable);
 }
 
-export function newControllerEvents({
+export function createControllerEvents({
   controllerType,
   view,
   findTable,

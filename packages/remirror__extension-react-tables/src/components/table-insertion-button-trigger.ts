@@ -1,4 +1,4 @@
-import { CSSProperties, h } from 'jsx-dom/min';
+import { CSSProperties, h } from 'jsx-dom';
 import { EditorView } from '@remirror/pm';
 
 import { borderWidth, ControllerType } from '../const';
@@ -7,7 +7,12 @@ import { setNodeAttrs } from '../utils/prosemirror';
 import { CellAxis, FindTable } from '../utils/types';
 import { InsertionButtonAttrs } from './table-insertion-button';
 
-type TriggerAreaType = 'add_column_left' | 'add_column_right' | 'add_row_up' | 'add_row_buttom'; // TODO: use enum
+enum TriggerAreaType {
+  ADD_COLUMN_BEFORE = 'add_column_left',
+  ADD_COLUMN_AFTER = 'add_column_right',
+  ADD_ROW_BEFORE = 'add_row_up',
+  ADD_ROW_AFTER = 'add_row_buttom',
+}
 
 function buildInsertionButtonAttrs(
   type: TriggerAreaType,
@@ -19,7 +24,7 @@ function buildInsertionButtonAttrs(
   const relativeCoord = getRelativeCoord(triggerRect, editorDom);
 
   switch (type) {
-    case 'add_column_left':
+    case TriggerAreaType.ADD_COLUMN_BEFORE:
       return {
         triggerRect,
         x: relativeCoord.x - borderWidth,
@@ -27,7 +32,7 @@ function buildInsertionButtonAttrs(
         row: -1,
         col: col,
       };
-    case 'add_column_right':
+    case TriggerAreaType.ADD_COLUMN_AFTER:
       return {
         triggerRect,
         x: relativeCoord.x + triggerRect.width,
@@ -35,7 +40,7 @@ function buildInsertionButtonAttrs(
         row: -1,
         col: col + 1,
       };
-    case 'add_row_up':
+    case TriggerAreaType.ADD_ROW_BEFORE:
       return {
         triggerRect,
         x: relativeCoord.x + 12,
@@ -97,9 +102,9 @@ const TriggerArea = ({
     // background: 'linear-gradient(to left top, rgba(0, 255, 100, 0.3), rgba(200, 100, 255, 0.3))',
   };
 
-  if (type === 'add_column_left' || type === 'add_column_right') {
+  if (type === TriggerAreaType.ADD_COLUMN_BEFORE || type === TriggerAreaType.ADD_COLUMN_AFTER) {
     style.height = '36px';
-  } else if (type === 'add_row_up' || type === 'add_row_buttom') {
+  } else {
     style.width = '36px';
   }
 
@@ -126,13 +131,13 @@ const TableInsertionButtonTrigger = ({
 }): HTMLElement[] => {
   if (controllerType === ControllerType.COLUMN_CONTROLLER) {
     return [
-      TriggerArea({ type: 'add_column_left', view, findTable, getAxis }),
-      TriggerArea({ type: 'add_column_right', view, findTable, getAxis }),
+      TriggerArea({ view, findTable, getAxis, type: TriggerAreaType.ADD_COLUMN_BEFORE }),
+      TriggerArea({ view, findTable, getAxis, type: TriggerAreaType.ADD_COLUMN_AFTER }),
     ];
   } else if (controllerType === ControllerType.ROW_CONTROLLER) {
     return [
-      TriggerArea({ type: 'add_row_up', view, findTable, getAxis }),
-      TriggerArea({ type: 'add_row_buttom', view, findTable, getAxis }),
+      TriggerArea({ view, findTable, getAxis, type: TriggerAreaType.ADD_ROW_BEFORE }),
+      TriggerArea({ view, findTable, getAxis, type: TriggerAreaType.ADD_ROW_AFTER }),
     ];
   }
 

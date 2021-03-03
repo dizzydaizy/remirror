@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import { h } from 'jsx-dom/min';
+import { h } from 'jsx-dom';
 import { EditorSchema, EditorView, NodeView, range, throttle } from '@remirror/core';
 import { Node as ProsemirrorNode } from '@remirror/pm/model';
 import { TableMap, updateColumnsOnResize } from '@remirror/pm/tables';
@@ -9,7 +9,7 @@ import TableInsertionButton, {
   shouldHideInsertionButton,
 } from '../components/table-insertion-button';
 import { ClassName } from '../const';
-import { TableNodeAttrs } from '../table-extension';
+import { ReactTableNodeAttrs } from '../table-extensions';
 import { injectControllers } from '../utils/controller';
 
 export interface TableStyleOptions {
@@ -32,7 +32,7 @@ export const defaultTableStyleOptions = {
   headerCellBackgroundColor: 'rgba(220, 222, 224, 0.5)',
 };
 
-export type GetTableStyle = (attrs: TableNodeAttrs) => string;
+export type GetTableStyle = (attrs: ReactTableNodeAttrs) => string;
 
 export function buildTableStyle(options?: TableStyleOptions): GetTableStyle {
   const {
@@ -126,7 +126,7 @@ export function buildTableStyle(options?: TableStyleOptions): GetTableStyle {
     }
   `;
 
-  const getStyle = (attrs: TableNodeAttrs) => {
+  const getStyle = (attrs: ReactTableNodeAttrs) => {
     let tableWithPreviewSelection = '';
 
     if (attrs.previewSelectionColumn !== -1) {
@@ -181,7 +181,7 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
   private showInsertationButton: boolean;
 
   map: TableMap;
-  getTableStyle: (attrs: TableNodeAttrs) => string;
+  getTableStyle: (attrs: ReactTableNodeAttrs) => string;
 
   get dom(): HTMLElement {
     return this.root;
@@ -226,7 +226,7 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
           getMap: () => this.map,
           getPos: this.getPos,
           tr,
-          oldTable: node,
+          table: node,
         });
         view.dispatch(tr);
       }, 0); // TODO: better way to do the injection then setTimeout?
@@ -317,7 +317,7 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
   }
 
   private attrs() {
-    return this.node.attrs as TableNodeAttrs;
+    return this.node.attrs as ReactTableNodeAttrs;
   }
 
   ignoreMutation(): boolean {

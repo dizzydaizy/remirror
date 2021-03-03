@@ -1,9 +1,9 @@
 import { css, cx } from '@emotion/css';
-import { h } from 'jsx-dom/min';
+import { h } from 'jsx-dom';
 import { EditorView } from '@remirror/core';
 import { TableRect } from '@remirror/pm/tables';
 
-import { TableNodeAttrs } from '../table-extension';
+import { ReactTableNodeAttrs } from '../table-extensions';
 import { setNodeAttrs } from '../utils/prosemirror';
 import { controllerAutoHide } from '../utils/style';
 import { addColumn, addRow } from '../utils/table-commands';
@@ -20,12 +20,6 @@ export interface InsertionButtonAttrs {
   row: number;
   // If `col` is not `-1`, this button will add a col at this index.
   col: number;
-}
-
-export interface TableInsertionButtonProps {
-  view: EditorView;
-  tableRect: TableRect;
-  attrs: InsertionButtonAttrs;
 }
 
 export function shouldHideInsertionButton(attrs: InsertionButtonAttrs, e: MouseEvent): boolean {
@@ -70,6 +64,12 @@ function InnerTableInsertionButton(attrs: InsertionButtonAttrs): HTMLElement {
   );
 }
 
+export interface TableInsertionButtonProps {
+  view: EditorView;
+  tableRect: TableRect;
+  attrs: InsertionButtonAttrs;
+}
+
 function TableInsertionButton({ view, tableRect, attrs }: TableInsertionButtonProps): HTMLElement {
   const button = InnerTableInsertionButton(attrs);
 
@@ -85,7 +85,7 @@ function TableInsertionButton({ view, tableRect, attrs }: TableInsertionButtonPr
     }
 
     // Remove insertionButtonAttrs from tableNode so that the TableInsertionButton won't keep at the origin position.
-    const attrsPatch: Partial<TableNodeAttrs> = { insertionButtonAttrs: null };
+    const attrsPatch: Partial<ReactTableNodeAttrs> = { insertionButtonAttrs: null };
     tr = setNodeAttrs(tr, tableRect.tableStart - 1, attrsPatch);
 
     view.dispatch(tr);

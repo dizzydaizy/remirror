@@ -1,31 +1,37 @@
 import React, { useState } from 'react';
+import { PositionerPortal } from '@remirror/react-components';
 import { useEvents, usePositioner } from '@remirror/react-hooks';
 
-import { cellPositioner } from '../block-positioner';
+import { menuCellPositioner } from '../block-positioner';
 import { borderWidth } from '../const';
 
 export interface TableCellMenuButtonProps {
   setPopupOpen: (open: boolean) => void;
 }
-export type TableCellMenuButton = React.ComponentType<TableCellMenuButtonProps>;
 
-export const DefaultTableCellMenuButton: React.FC<TableCellMenuButtonProps> = ({
-  setPopupOpen,
-}) => {
+const DefaultTableCellMenuButton: React.FC<TableCellMenuButtonProps> = ({ setPopupOpen }) => {
   return (
-    <button
+    <div
       onClick={() => setPopupOpen(true)}
-      style={{ position: 'relative', left: '-8px', top: '8px' }}
+      style={{
+        position: 'relative',
+        right: '0px',
+        top: '0px',
+        height: '16px',
+        width: '16px',
+        border: '1px solid blue',
+        fontSize: '10px',
+        lineHeight: '10px',
+      }}
     >
       v
-    </button>
+    </div>
   );
 };
 
-export type TableCellMenuPapperProps = Record<string, never>;
-export type TableCellMenuPopup = React.ComponentType<TableCellMenuPapperProps>;
+export type TableCellMenuPopupProps = Record<string, never>;
 
-export const DefaultTableCellMenuPopup: React.FC<TableCellMenuPapperProps> = () => {
+const DefaultTableCellMenuPopup: React.FC<TableCellMenuPopupProps> = () => {
   return (
     <div style={{ position: 'absolute', backgroundColor: 'white', border: '1px solid red' }}>
       MENU
@@ -34,15 +40,15 @@ export const DefaultTableCellMenuPopup: React.FC<TableCellMenuPapperProps> = () 
 };
 
 export interface TableCellMenuProps {
-  Button?: TableCellMenuButton;
-  Popup?: TableCellMenuPopup;
+  ButtonComponent?: React.ComponentType<TableCellMenuButtonProps>;
+  PopupComponent?: React.ComponentType<TableCellMenuPopupProps>;
 }
 
 const TableCellMenu: React.FC<TableCellMenuProps> = ({
-  Button = DefaultTableCellMenuButton,
-  Popup = DefaultTableCellMenuPopup,
+  ButtonComponent = DefaultTableCellMenuButton,
+  PopupComponent = DefaultTableCellMenuPopup,
 }) => {
-  const position = usePositioner(cellPositioner, []);
+  const position = usePositioner(menuCellPositioner, []);
   const { ref, width, height, x, y } = position;
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -52,33 +58,34 @@ const TableCellMenu: React.FC<TableCellMenuProps> = ({
   });
 
   return (
-    <div
-      ref={ref}
-      style={{
-        position: 'absolute',
-        left: x,
-        top: y,
-        width: width + borderWidth,
-        height: height + 1,
-        minHeight: 40,
-        minWidth: 40,
-        zIndex: 0,
-        pointerEvents: 'none',
+    <PositionerPortal>
+      <div
+        ref={ref}
+        style={{
+          position: 'absolute',
+          left: x,
+          top: y,
+          width: width + borderWidth,
+          height: height + borderWidth,
+          zIndex: 0,
+          pointerEvents: 'none',
 
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',
+          // place the child into the top-left corner
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-start',
 
-        // for debug:
-        // backgroundColor: 'lightpink',
-        // opacity: 0.5,
-      }}
-    >
-      <div style={{ pointerEvents: 'initial' }}>
-        <Button setPopupOpen={setPopupOpen} />
-        {popupOpen && <Popup />}
+          // for debug:
+          backgroundColor: 'lightpink',
+          opacity: 0.5,
+        }}
+      >
+        <div style={{ pointerEvents: 'initial' }}>
+          <ButtonComponent setPopupOpen={setPopupOpen} />
+          {popupOpen ? <PopupComponent /> : null}
+        </div>
       </div>
-    </div>
+    </PositionerPortal>
   );
 };
 

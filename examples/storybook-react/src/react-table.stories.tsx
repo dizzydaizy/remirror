@@ -1,12 +1,8 @@
 import { ReactComponentExtension } from '@remirror/extension-react-component';
 import {
-  TableCellExtension,
   TableCellMenu,
-  TableControllerCellExtension,
   TableDeleteRowColumnButton,
   TableExtension,
-  TableHeaderCellExtension,
-  TableRowExtension,
 } from '@remirror/extension-react-tables';
 import {
   EditorComponent,
@@ -86,13 +82,6 @@ Table.args = {
   openLinkOnClick: true,
 };
 
-const extensions = () => [
-  new ReactComponentExtension(),
-  new TableExtension(),
-  new TableRowExtension(),
-  new TableHeaderCellExtension(),
-  new TableCellExtension(),
-  new TableControllerCellExtension(),
-];
+const extensions = () => [new ReactComponentExtension(), new TableExtension()];
 
 const content = '';

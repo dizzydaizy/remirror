@@ -4,7 +4,7 @@
 
 // Copied from https://github.com/ProseMirror/prosemirror-tables/blob/v1.1.1/src/columnresizing.js
 // License: MIT
-// Copyright (C) 2015-2016 by Marijn Haverbeke <marijnh@gmail.com> and others
+// Copyright (C) 2015-2020 by Marijn Haverbeke <marijnh@gmail.com> and others
 //
 
 import { EditorState, EditorView, ResolvedPos, Transaction } from '@remirror/pm';

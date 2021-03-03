@@ -16,19 +16,24 @@ import { usePositioner } from '@remirror/react-hooks';
 import { CellSelectionType, getCellSelectionType } from '../utils/controller';
 import { mergeDOMRects } from '../utils/dom';
 
-export interface TableControllerPositionerData {
+interface DeleteButtonPositionerData {
   tableResult: FindProsemirrorNodeResult;
   cellSelectionType: CellSelectionType;
   anchorCellPos: number;
   headCellPos: number;
 }
 
-export function createTableControllerPositioner({
+/**
+ * Returns a positioner for the position of
+ * @param margin:
+ * @returns
+ */
+function createDeleteButtonPositioner({
   margin,
 }: {
   margin: number;
-}): Positioner<TableControllerPositionerData> {
-  return Positioner.create<TableControllerPositionerData>({
+}): Positioner<DeleteButtonPositionerData> {
+  return Positioner.create<DeleteButtonPositionerData>({
     hasChanged: hasStateChanged,
 
     getActive(props) {
@@ -45,7 +50,7 @@ export function createTableControllerPositioner({
           const tableResult = findParentNodeOfType({ types: 'table', selection });
 
           if (tableResult) {
-            const positionerData: TableControllerPositionerData = {
+            const positionerData: DeleteButtonPositionerData = {
               tableResult,
               cellSelectionType,
               anchorCellPos: selection.$anchorCell.pos,
@@ -104,10 +109,22 @@ export function createTableControllerPositioner({
   });
 }
 
-export const InnerDeleleButton: React.FC<{
+export interface TableDeleteRowColumnInnerButtonProps {
+  /**
+   * The position of the button
+   */
   position: UsePositionerReturn;
+
+  /**
+   * The action when the button is pressed.
+   */
   onClick: MouseEventHandler;
-}> = ({ position, onClick }) => {
+}
+
+export const TableDeleteRowColumnInnerButton: React.FC<TableDeleteRowColumnInnerButtonProps> = ({
+  position,
+  onClick,
+}) => {
   const size = 24;
   return (
     <button
@@ -127,10 +144,24 @@ export const InnerDeleleButton: React.FC<{
   );
 };
 
-export const TableDeleteRowColumnButton: React.FC<{ margin?: number }> = ({ margin = 16 }) => {
-  const ctx = useRemirrorContext();
-  const view = ctx.view;
-  const positioner = React.useMemo(() => createTableControllerPositioner({ margin }), [margin]);
+export interface TableDeleteRowColumnButtonProps {
+  /**
+   *
+   */
+  margin?: number;
+
+  /**
+   * the
+   */
+  Component?: React.ComponentType<TableDeleteRowColumnInnerButtonProps>;
+}
+
+export const TableDeleteRowColumnButton: React.FC<TableDeleteRowColumnButtonProps> = ({
+  margin = 16,
+  Component,
+}) => {
+  const { view } = useRemirrorContext();
+  const positioner = React.useMemo(() => createDeleteButtonPositioner({ margin }), [margin]);
   const position = usePositioner(positioner, []);
 
   const handleClick = () => {
@@ -147,9 +178,11 @@ export const TableDeleteRowColumnButton: React.FC<{ margin?: number }> = ({ marg
     }
   };
 
+  Component = Component ?? TableDeleteRowColumnInnerButton;
+
   return (
     <PositionerPortal>
-      <InnerDeleleButton position={position} onClick={handleClick} />
+      <Component position={position} onClick={handleClick} />
     </PositionerPortal>
   );
 };

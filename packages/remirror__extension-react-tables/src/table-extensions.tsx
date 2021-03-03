@@ -3,6 +3,7 @@ import {
   CreateExtensionPlugin,
   Decoration,
   EditorView,
+  ExtensionPriority,
   NodeExtension,
   NodeSpecOverride,
   NodeViewMethod,
@@ -11,20 +12,20 @@ import {
 } from '@remirror/core';
 import type { TableSchemaSpec } from '@remirror/extension-tables';
 import {
-  TableCellExtension as RemirrorTableCellExtension,
-  TableExtension as RemirrorTableExtension,
-  TableHeaderCellExtension as RemirrorTableHeaderCellExtension,
-  TableRowExtension as RemirrorTableRowExtension,
+  TableCellExtension as BaseTableCellExtension,
+  TableExtension as BaseTableExtension,
+  TableHeaderCellExtension as BaseTableHeaderCellExtension,
+  TableRowExtension as BaseTableRowExtension,
 } from '@remirror/extension-tables';
 import { tableEditing } from '@remirror/pm/tables';
 
 import { InsertionButtonAttrs } from './components/table-insertion-button';
 import { columnResizing } from './table-column-resizing';
-import { newTableDecorationPlugin } from './table-plugin';
+import { createTableDecorationPlugin } from './table-plugins';
 import { TableControllerCellView } from './views/table-controller-cell-view';
 import { TableView } from './views/table-view';
 
-export type TableNodeAttrs<T extends Record<string, any> = Record<never, never>> = T & {
+export type ReactTableNodeAttrs<T extends Record<string, any> = Record<never, never>> = T & {
   isControllersInjected: boolean;
   previewSelectionTable: boolean;
   previewSelectionColumn: number;
@@ -34,7 +35,7 @@ export type TableNodeAttrs<T extends Record<string, any> = Record<never, never>>
   insertionButtonAttrs: InsertionButtonAttrs | null;
 };
 
-export class TableExtension extends RemirrorTableExtension {
+export class TableExtension extends BaseTableExtension {
   get name() {
     return 'table' as const;
   }
@@ -51,7 +52,7 @@ export class TableExtension extends RemirrorTableExtension {
   }
 
   createPlugin(): CreateExtensionPlugin {
-    return newTableDecorationPlugin();
+    return createTableDecorationPlugin();
   }
 
   /**
@@ -77,7 +78,6 @@ export class TableExtension extends RemirrorTableExtension {
         previewSelectionColumn: { default: -1 },
         previewSelectionRow: { default: -1 },
         insertionButtonAttrs: { default: null },
-        deleteButtonAttrs: { default: null },
       },
       content: 'tableRow+',
       tableRole: 'table',
@@ -90,8 +90,12 @@ export class TableExtension extends RemirrorTableExtension {
     return spec;
   }
 
+  /**
+   * Create the table extensions. Set the priority to low so that they appear
+   * lower down in the node list.
+   */
   createExtensions() {
-    return [];
+    return [new TableRowExtension({ priority: ExtensionPriority.Low })];
   }
 
   onView(): void {
@@ -109,7 +113,7 @@ export class TableExtension extends RemirrorTableExtension {
   }
 }
 
-export class TableRowExtension extends RemirrorTableRowExtension {
+export class TableRowExtension extends BaseTableRowExtension {
   get name() {
     return 'tableRow' as const;
   }
@@ -124,12 +128,20 @@ export class TableRowExtension extends RemirrorTableRowExtension {
     return spec;
   }
 
+  /**
+   * Automatically create the `TableCellExtension`,`TableHeaderCellExtension`
+   * and `TableControllerCellExtension`. This is placed here so that this
+   * extension can be tested independently from the `TableExtension`.
+   */
   createExtensions() {
-    return [];
+    return [
+      new TableCellExtension({ priority: ExtensionPriority.Low }),
+      new TableHeaderCellExtension({ priority: ExtensionPriority.Low }),
+    ];
   }
 }
 
-export class TableHeaderCellExtension extends RemirrorTableHeaderCellExtension {
+export class TableHeaderCellExtension extends BaseTableHeaderCellExtension {
   get name() {
     return 'tableHeaderCell' as const;
   }
@@ -145,11 +157,11 @@ export class TableHeaderCellExtension extends RemirrorTableHeaderCellExtension {
   }
 
   createExtensions() {
-    return [];
+    return [new TableControllerCellExtension({ priority: ExtensionPriority.Low })];
   }
 }
 
-export class TableCellExtension extends RemirrorTableCellExtension {
+export class TableCellExtension extends BaseTableCellExtension {
   get name() {
     return 'tableCell' as const;
   }
@@ -161,7 +173,7 @@ export class TableCellExtension extends RemirrorTableCellExtension {
   }
 }
 
-export interface TableControllerCellAttrs {
+export interface ReactTableControllerCellAttrs {
   colspan: number;
   rowspan: number;
   colwidth: null | number;
