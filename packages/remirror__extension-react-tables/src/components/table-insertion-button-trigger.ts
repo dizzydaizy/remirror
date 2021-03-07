@@ -8,10 +8,10 @@ import { CellAxis, FindTable } from '../utils/types';
 import { InsertionButtonAttrs } from './table-insertion-button';
 
 enum TriggerAreaType {
-  ADD_COLUMN_BEFORE = 'add_column_left',
-  ADD_COLUMN_AFTER = 'add_column_right',
-  ADD_ROW_BEFORE = 'add_row_up',
-  ADD_ROW_AFTER = 'add_row_buttom',
+  ADD_COLUMN_BEFORE = 1,
+  ADD_COLUMN_AFTER = 2,
+  ADD_ROW_BEFORE = 3,
+  ADD_ROW_AFTER = 4,
 }
 
 function buildInsertionButtonAttrs(

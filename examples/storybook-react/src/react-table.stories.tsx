@@ -1,3 +1,7 @@
+import { Story } from '@storybook/react';
+import { useEffect, useState } from 'react';
+import { EditorState } from 'remirror';
+import { ProsemirrorDevTools } from '@remirror/dev';
 import { ReactComponentExtension } from '@remirror/extension-react-component';
 import {
   TableCellMenu,
@@ -12,10 +16,9 @@ import {
   useRemirrorContext,
 } from '@remirror/react';
 import { AllStyledComponent } from '@remirror/styles/emotion';
-
 export default { title: 'React Tables extension' };
 
-const CommandMenu = () => {
+const CommandMenu: React.FC<{ state: EditorState }> = ({ state }) => {
   const { commands } = useRemirrorContext();
   const createTable = commands.createTable;
 
@@ -54,23 +57,52 @@ const CommandMenu = () => {
         >
           insert a 8*100 table
         </button>
+        <button onClick={() => commands.addTableColumnAfter()}>
+          add a column after the current one
+        </button>
+        <button onClick={() => commands.addTableRowBefore()}>
+          add a row before the current one
+        </button>
         <button onClick={() => commands.deleteTable()}>delete the table</button>
       </p>
     </div>
   );
 };
 
-export const Table = (): JSX.Element => {
-  const { manager, state } = useRemirror({ extensions, content, stringHandler: 'html' });
+const ProsemirrorDocData: React.FC = () => {
+  const ctx = useRemirrorContext({ autoUpdate: false });
+  const [jsonDoc, setJsonDoc] = useState('');
+  const { addHandler, view } = ctx;
+
+  useEffect(() => {
+    addHandler('updated', () => {
+      setJsonDoc(JSON.stringify(view.state.doc.toJSON(), null, 2));
+    });
+  }, [addHandler, view]);
+
+  return (
+    <div>
+      <p>view.state.doc.toJSON()</p>
+      <pre style={{ fontSize: '12px', lineHeight: '12px' }}>
+        <code>{jsonDoc}</code>
+      </pre>
+    </div>
+  );
+};
+
+export const Table: Story = ({ children }) => {
+  const { manager, state } = useRemirror({ extensions });
 
   return (
     <AllStyledComponent>
       <ThemeProvider>
         <Remirror manager={manager} initialContent={state}>
           <EditorComponent />
-          <CommandMenu />
+          <CommandMenu state={state} />
           <TableDeleteRowColumnButton />
           <TableCellMenu />
+          <ProsemirrorDocData />
+          {children}
         </Remirror>
       </ThemeProvider>
     </AllStyledComponent>
@@ -82,6 +114,12 @@ Table.args = {
   openLinkOnClick: true,
 };
 
-const extensions = () => [new ReactComponentExtension(), new TableExtension()];
+export const TableWithDevTools: Story = () => {
+  return (
+    <Table>
+      <ProsemirrorDevTools />
+    </Table>
+  );
+};
 
-const content = '';
+const extensions = () => [new ReactComponentExtension(), new TableExtension()];

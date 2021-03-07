@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import { h } from 'jsx-dom';
-import { EditorSchema, EditorView, NodeView, range, throttle } from '@remirror/core';
+import { EditorSchema, EditorView, NodeView, range, throttle, Transaction } from '@remirror/core';
 import { Node as ProsemirrorNode } from '@remirror/pm/model';
 import { TableMap, updateColumnsOnResize } from '@remirror/pm/tables';
 import { Decoration } from '@remirror/pm/view';
@@ -11,6 +11,7 @@ import TableInsertionButton, {
 import { ClassName } from '../const';
 import { ReactTableNodeAttrs } from '../table-extensions';
 import { injectControllers } from '../utils/controller';
+import { setNodeAttrs } from '../utils/prosemirror';
 
 export interface TableStyleOptions {
   previewSelectionBorderColor: string;
@@ -178,7 +179,8 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
   readonly insertionButtonWrapper: HTMLElement;
 
   private readonly handleMouseMove: (e: MouseEvent) => void;
-  private showInsertationButton: boolean;
+  private showInsertionButton: boolean;
+  private removeInsertionButton?: (tr: Transaction) => Transaction;
 
   map: TableMap;
   getTableStyle: (attrs: ReactTableNodeAttrs) => string;
@@ -238,14 +240,18 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
 
     this.render();
 
-    this.showInsertationButton = false;
+    this.showInsertionButton = false;
     this.handleMouseMove = throttle(100, (e: MouseEvent) => {
-      if (this.showInsertationButton) {
+      if (this.showInsertionButton) {
         const attrs = this.attrs().insertionButtonAttrs;
 
         if (attrs && shouldHideInsertionButton(attrs, e)) {
-          this.showInsertationButton = false;
+          this.showInsertionButton = false;
           replaceChildren(this.insertionButtonWrapper, []);
+
+          if (this.removeInsertionButton) {
+            this.view.dispatch(this.removeInsertionButton(this.view.state.tr));
+          }
         }
       }
     });
@@ -293,26 +299,33 @@ export class TableView<Schema extends EditorSchema = EditorSchema> implements No
     const attrs = this.attrs().insertionButtonAttrs;
 
     if (attrs) {
+      const tableRect = {
+        map: this.map,
+        table: this.node,
+        tableStart: this.getPos() + 1,
+
+        // The following properties are not actually used
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      };
+      this.removeInsertionButton = (tr: Transaction): Transaction => {
+        // Remove insertionButtonAttrs from tableNode so that the TableInsertionButton won't keep at the origin position.
+        const attrsPatch: Partial<ReactTableNodeAttrs> = { insertionButtonAttrs: null };
+        return setNodeAttrs(tr, tableRect.tableStart - 1, attrsPatch);
+      };
       const button = TableInsertionButton({
         view: this.view,
         attrs,
-        tableRect: {
-          map: this.map,
-          table: this.node,
-          tableStart: this.getPos() + 1,
-
-          // The following properties are not actually used
-          left: 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
-        },
+        tableRect,
+        removeInsertionButton: this.removeInsertionButton,
       });
       replaceChildren(this.insertionButtonWrapper, [button]);
-      this.showInsertationButton = true;
+      this.showInsertionButton = true;
     } else {
       replaceChildren(this.insertionButtonWrapper, []);
-      this.showInsertationButton = false;
+      this.showInsertionButton = false;
     }
   }
 

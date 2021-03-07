@@ -4,7 +4,7 @@ import { DispatchFunction, EditorState, ProsemirrorNode } from '@remirror/core';
 import { Transaction } from '@remirror/pm/state';
 import { addColSpan, isInTable, selectedRect, TableMap, tableNodeTypes } from '@remirror/pm/tables';
 
-import { setAttr } from '../table-column-resizing';
+import { setAttr } from './table-column-resizing';
 
 /**
  * Add a column at the given position in a table.
@@ -18,7 +18,7 @@ export function addColumn(
   { map, tableStart, table }: { map: TableMap; tableStart: number; table: ProsemirrorNode },
   col: number,
 ): Transaction {
-  const refColumn: number = col < map.width - 1 ? +1 : 0;
+  const refColumn: number = col < map.width - 1 ? 0 : -1;
 
   for (let row = 0; row < map.height; row++) {
     const index = row * map.width + col;
@@ -94,8 +94,8 @@ export function addRow(
     rowPos += table.child(i).nodeSize;
   }
 
+  const refRow: number = row < map.height - 1 ? 0 : -1;
   const cells: ProsemirrorNode[] = [];
-  const refRow = row > 0 ? -1 : 0;
 
   for (let col = 0, index = map.width * row; col < map.width; col++, index++) {
     // Covered by a rowspan cell

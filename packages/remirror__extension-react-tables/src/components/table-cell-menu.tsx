@@ -11,8 +11,10 @@ export interface TableCellMenuButtonProps {
 
 const DefaultTableCellMenuButton: React.FC<TableCellMenuButtonProps> = ({ setPopupOpen }) => {
   return (
-    <div
-      onClick={() => setPopupOpen(true)}
+    <button
+      onClick={() => {
+        setPopupOpen(true);
+      }}
       style={{
         position: 'relative',
         right: '0px',
@@ -22,10 +24,11 @@ const DefaultTableCellMenuButton: React.FC<TableCellMenuButtonProps> = ({ setPop
         border: '1px solid blue',
         fontSize: '10px',
         lineHeight: '10px',
+        cursor: 'pointer',
       }}
     >
       v
-    </div>
+    </button>
   );
 };
 
@@ -52,6 +55,7 @@ const TableCellMenu: React.FC<TableCellMenuProps> = ({
   const { ref, width, height, x, y } = position;
   const [popupOpen, setPopupOpen] = useState(false);
 
+  // Hide the popup when users click.
   useEvents('mousedown', () => {
     popupOpen && setPopupOpen(false);
     return false;
@@ -67,7 +71,7 @@ const TableCellMenu: React.FC<TableCellMenuProps> = ({
           top: y,
           width: width + borderWidth,
           height: height + borderWidth,
-          zIndex: 0,
+          zIndex: 100,
           pointerEvents: 'none',
 
           // place the child into the top-left corner
@@ -76,11 +80,16 @@ const TableCellMenu: React.FC<TableCellMenuProps> = ({
           alignItems: 'flex-start',
 
           // for debug:
-          backgroundColor: 'lightpink',
-          opacity: 0.5,
+          // backgroundColor: 'lightpink',
+          // opacity: 0.5,
         }}
       >
-        <div style={{ pointerEvents: 'initial' }}>
+        <div
+          style={{
+            zIndex: 100,
+            pointerEvents: 'initial',
+          }}
+        >
           <ButtonComponent setPopupOpen={setPopupOpen} />
           {popupOpen ? <PopupComponent /> : null}
         </div>

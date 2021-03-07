@@ -1,12 +1,10 @@
 import { css, cx } from '@emotion/css';
 import { h } from 'jsx-dom';
-import { EditorView } from '@remirror/core';
+import { EditorView, Transaction } from '@remirror/core';
 import { TableRect } from '@remirror/pm/tables';
 
-import { ReactTableNodeAttrs } from '../table-extensions';
-import { setNodeAttrs } from '../utils/prosemirror';
+import { addColumn, addRow } from '../react-table-commands';
 import { controllerAutoHide } from '../utils/style';
-import { addColumn, addRow } from '../utils/table-commands';
 
 export interface InsertionButtonAttrs {
   // The center axis (in px) of the TableInsertionButton relative to the editor
@@ -68,9 +66,15 @@ export interface TableInsertionButtonProps {
   view: EditorView;
   tableRect: TableRect;
   attrs: InsertionButtonAttrs;
+  removeInsertionButton: (tr: Transaction) => Transaction;
 }
 
-function TableInsertionButton({ view, tableRect, attrs }: TableInsertionButtonProps): HTMLElement {
+function TableInsertionButton({
+  view,
+  tableRect,
+  attrs,
+  removeInsertionButton,
+}: TableInsertionButtonProps): HTMLElement {
   const button = InnerTableInsertionButton(attrs);
 
   const insertRolOrColumn = () => {
@@ -84,11 +88,7 @@ function TableInsertionButton({ view, tableRect, attrs }: TableInsertionButtonPr
       return;
     }
 
-    // Remove insertionButtonAttrs from tableNode so that the TableInsertionButton won't keep at the origin position.
-    const attrsPatch: Partial<ReactTableNodeAttrs> = { insertionButtonAttrs: null };
-    tr = setNodeAttrs(tr, tableRect.tableStart - 1, attrsPatch);
-
-    view.dispatch(tr);
+    view.dispatch(removeInsertionButton(tr));
   };
 
   button.addEventListener('click', () => {

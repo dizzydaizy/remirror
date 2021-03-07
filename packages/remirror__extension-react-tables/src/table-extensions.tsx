@@ -1,5 +1,8 @@
 import {
   ApplySchemaAttributes,
+  command,
+  CommandFunction,
+  convertCommand,
   CreateExtensionPlugin,
   Decoration,
   EditorView,
@@ -20,6 +23,7 @@ import {
 import { tableEditing } from '@remirror/pm/tables';
 
 import { InsertionButtonAttrs } from './components/table-insertion-button';
+import { addColumnAfter, addColumnBefore, addRowAfter, addRowBefore } from './react-table-commands';
 import { columnResizing } from './table-column-resizing';
 import { createTableDecorationPlugin } from './table-plugins';
 import { TableControllerCellView } from './views/table-controller-cell-view';
@@ -110,6 +114,38 @@ export class TableExtension extends BaseTableExtension {
       table: schema.nodes.table,
       header_cell: schema.nodes.tableHeaderCell,
     };
+  }
+
+  /**
+   * Command to add a column before the column with the selection.
+   */
+  @command()
+  addTableColumnBefore(): CommandFunction {
+    return convertCommand(addColumnBefore);
+  }
+
+  /**
+   * Command to add a column after the column with the selection.
+   */
+  @command()
+  addTableColumnAfter(): CommandFunction {
+    return convertCommand(addColumnAfter);
+  }
+
+  /**
+   * Add a table row before the current selection.
+   */
+  @command()
+  addTableRowBefore(): CommandFunction {
+    return convertCommand(addRowBefore);
+  }
+
+  /**
+   * Add a table row after the current selection.
+   */
+  @command()
+  addTableRowAfter(): CommandFunction {
+    return convertCommand(addRowAfter);
   }
 }
 
