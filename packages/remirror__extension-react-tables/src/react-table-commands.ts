@@ -47,7 +47,10 @@ export function addColumn(
 /**
  * Command to add a column before the column with the selection.
  */
-export function addColumnBefore(state: EditorState, dispatch: DispatchFunction): boolean {
+export function addColumnBefore(
+  state: EditorState,
+  dispatch: DispatchFunction | undefined,
+): boolean {
   if (!isInTable(state)) {
     return false;
   }
@@ -63,7 +66,10 @@ export function addColumnBefore(state: EditorState, dispatch: DispatchFunction):
 /**
  * Command to add a column after the column with the selection.
  */
-export function addColumnAfter(state: EditorState, dispatch: DispatchFunction): boolean {
+export function addColumnAfter(
+  state: EditorState,
+  dispatch: DispatchFunction | undefined,
+): boolean {
   if (!isInTable(state)) {
     return false;
   }
@@ -117,7 +123,7 @@ export function addRow(
 /**
  * Add a table row before the selection.
  */
-export function addRowBefore(state: EditorState, dispatch: DispatchFunction): boolean {
+export function addRowBefore(state: EditorState, dispatch: DispatchFunction | undefined): boolean {
   if (!isInTable(state)) {
     return false;
   }
@@ -133,7 +139,7 @@ export function addRowBefore(state: EditorState, dispatch: DispatchFunction): bo
 /**
  * Add a table row after the selection.
  */
-export function addRowAfter(state: EditorState, dispatch: DispatchFunction): boolean {
+export function addRowAfter(state: EditorState, dispatch: DispatchFunction | undefined): boolean {
   if (!isInTable(state)) {
     return false;
   }

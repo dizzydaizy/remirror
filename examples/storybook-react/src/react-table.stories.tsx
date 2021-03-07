@@ -1,6 +1,5 @@
 import { Story } from '@storybook/react';
 import { useEffect, useState } from 'react';
-import { EditorState } from 'remirror';
 import { ProsemirrorDevTools } from '@remirror/dev';
 import { ReactComponentExtension } from '@remirror/extension-react-component';
 import {
@@ -16,9 +15,10 @@ import {
   useRemirrorContext,
 } from '@remirror/react';
 import { AllStyledComponent } from '@remirror/styles/emotion';
+
 export default { title: 'React Tables extension' };
 
-const CommandMenu: React.FC<{ state: EditorState }> = ({ state }) => {
+const CommandMenu: React.FC = () => {
   const { commands } = useRemirrorContext();
   const createTable = commands.createTable;
 
@@ -98,7 +98,7 @@ export const Table: Story = ({ children }) => {
       <ThemeProvider>
         <Remirror manager={manager} initialContent={state}>
           <EditorComponent />
-          <CommandMenu state={state} />
+          <CommandMenu />
           <TableDeleteRowColumnButton />
           <TableCellMenu />
           <ProsemirrorDocData />
