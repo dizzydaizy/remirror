@@ -49,7 +49,8 @@ export function buildTableStyle(options?: TableStyleOptions): GetTableStyle {
   const previewSelectionClass = css`
     border-color: ${previewSelectionBorderColor};
     border-width: 1px;
-    border-style: double; // Make the border-style 'double' instead of 'solid'. This works because 'double' has a higher priority than 'solid'.
+    /* Make the border-style 'double' instead of 'solid'. This works because 'double' has a higher priority than 'solid' */
+    border-style: double;
   `;
 
   const previewSelectionControllerClass = css`
@@ -58,13 +59,13 @@ export function buildTableStyle(options?: TableStyleOptions): GetTableStyle {
   `;
 
   const tableClass = css`
-    // spec for marks
+    /* Space for marks */
     margin-top: 40px;
 
-    // To show marks
+    /* To show marks */
     overflow: visible !important;
 
-    // To let controller's height:100% works, table must set its height.
+    /* To make controller's 'height: 100%' works, table must set its own height. */
     height: 1px;
 
     border-collapse: collapse;
