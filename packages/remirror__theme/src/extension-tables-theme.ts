@@ -28,12 +28,12 @@ export const EDITOR = css`
       bottom: 0;
       width: 4px;
       z-index: 20;
-      background-color: ${getTheme((t) => t.hue.blue[9])};
+      background-color: ${getTheme((t) => t.hue.red[9])}; /* WIP */
       pointer-events: none;
     }
     .resize-cursor {
-      cursor: ew-resize;
-      cursor: col-resize;
+      cursor: ew-resize !important; /* WIP */
+      cursor: col-resize !important; /* WIP */
     }
 
     /* Give selected cells a blue overlay */

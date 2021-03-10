@@ -3644,12 +3644,12 @@ export const extensionTablesStyledCss: ReturnType<typeof css> = css`
     bottom: 0;
     width: 4px;
     z-index: 20;
-    background-color: var(--rmr-hue-blue-9);
+    background-color: var(--rmr-hue-red-9);
     pointer-events: none;
   }
   .remirror-editor .ProseMirror .resize-cursor {
-    cursor: ew-resize;
-    cursor: col-resize;
+    cursor: ew-resize !important;
+    cursor: col-resize !important;
   }
   /* Give selected cells a blue overlay */
   .remirror-editor .ProseMirror .selectedCell:after {

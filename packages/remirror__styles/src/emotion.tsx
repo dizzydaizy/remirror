@@ -3640,17 +3640,17 @@ export const extensionTablesStyledCss: ReturnType<typeof css> = css`
   }
   .remirror-editor .ProseMirror .column-resize-handle {
     position: absolute;
-    right: -2px;
+    right: -20px;
     top: 0;
     bottom: 0;
     width: 4px;
-    z-index: 20;
-    background-color: var(--rmr-hue-blue-9);
+    z-index: 40;
+    background-color: var(--rmr-hue-red-9);
     pointer-events: none;
   }
   .remirror-editor .ProseMirror .resize-cursor {
-    cursor: ew-resize;
-    cursor: col-resize;
+    cursor: ew-resize !important;
+    cursor: col-resize !important;
   }
   /* Give selected cells a blue overlay */
   .remirror-editor .ProseMirror .selectedCell:after {
