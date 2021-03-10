@@ -1604,6 +1604,7 @@ importers:
       '@remirror/core-utils': link:../remirror__core-utils
       '@remirror/extension-positioner': link:../remirror__extension-positioner
       '@remirror/extension-tables': link:../remirror__extension-tables
+      '@remirror/icons': link:../remirror__icons
       '@remirror/messages': link:../remirror__messages
       '@remirror/preset-core': link:../remirror__preset-core
       '@remirror/react-components': link:../remirror__react-components
@@ -1626,6 +1627,7 @@ importers:
       '@remirror/core-utils': 1.0.0-next.60
       '@remirror/extension-positioner': 1.0.0-next.60
       '@remirror/extension-tables': 1.0.0-next.60
+      '@remirror/icons': 0.0.0
       '@remirror/messages': 0.0.0
       '@remirror/pm': 1.0.0-next.60
       '@remirror/preset-core': 1.0.0-next.60

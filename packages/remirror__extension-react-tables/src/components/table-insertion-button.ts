@@ -3,6 +3,7 @@ import { h } from 'jsx-dom';
 import { EditorView, Transaction } from '@remirror/core';
 import { TableRect } from '@remirror/pm/tables';
 
+import { addFill } from '../../../remirror__core/node_modules/@remirror/icons/src/all-icons';
 import { addColumn, addRow } from '../react-table-commands';
 import { controllerAutoHide } from '../utils/style';
 
@@ -40,6 +41,35 @@ export function shouldHideInsertionButton(attrs: InsertionButtonAttrs, e: MouseE
   return true;
 }
 
+let addFillIconCache: SVGSVGElement | null = null;
+
+// TODO: this part is so ugly.
+function AddFillIcon(): SVGSVGElement {
+  if (addFillIconCache) {
+    return addFillIconCache;
+  }
+
+  const xmlns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(xmlns, 'svg');
+  svg.setAttribute('xmlns', xmlns);
+  svg.setAttribute('viewBox', '0 0 24 24');
+  const g = document.createElementNS(xmlns, 'g');
+
+  for (const tree of addFill) {
+    const path = document.createElementNS(xmlns, tree.tag);
+
+    for (const [key, value] of Object.entries(tree.attr)) {
+      path.setAttribute(key, value);
+    }
+
+    g.append(path);
+  }
+
+  svg.append(g);
+  addFillIconCache = svg;
+  return svg;
+}
+
 function InnerTableInsertionButton(attrs: InsertionButtonAttrs): HTMLElement {
   const size = 24;
 
@@ -47,18 +77,32 @@ function InnerTableInsertionButton(attrs: InsertionButtonAttrs): HTMLElement {
     position: absolute;
     width: ${size}px;
     height: ${size}px;
-    top: ${attrs.y - size / 2}px;
+    top: ${attrs.y - size / 2 - 4}px;
     left: ${attrs.x - size / 2}px;
-    z-index: 105;
-    border: 3px solid red;
+    z-index: 1300;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 150ms ease;
+
+    background-color: #dcdcdc;
+    & svg {
+      fill: #545454;
+    }
+
+    &:hover {
+      background-color: #136bda;
+      & svg {
+        fill: #ffffff;
+      }
+    }
   `;
 
   return h(
-    'button',
+    'div',
     {
       className: cx(className, controllerAutoHide),
     },
-    '+',
+    AddFillIcon(),
   );
 }
 

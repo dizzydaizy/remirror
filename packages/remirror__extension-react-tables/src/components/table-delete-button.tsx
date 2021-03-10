@@ -1,3 +1,4 @@
+import { css } from '@emotion/css';
 import React, { MouseEventHandler } from 'react';
 import type { FindProsemirrorNodeResult } from '@remirror/core';
 import { findParentNodeOfType, isElementDomNode } from '@remirror/core';
@@ -9,6 +10,7 @@ import {
 } from '@remirror/extension-positioner';
 import { deleteColumn, deleteRow, isCellSelection, TableMap } from '@remirror/pm/tables';
 import { PositionerPortal } from '@remirror/react-components';
+import { CloseFillIcon } from '@remirror/react-components/all-icons';
 import { useRemirrorContext } from '@remirror/react-core';
 import type { UsePositionerReturn } from '@remirror/react-hooks';
 import { usePositioner } from '@remirror/react-hooks';
@@ -125,22 +127,29 @@ export const TableDeleteRowColumnInnerButton: React.FC<TableDeleteRowColumnInner
   position,
   onClick,
 }) => {
-  const size = 24;
+  const size = 18;
   return (
-    <button
+    <div
       ref={position.ref}
-      style={{
-        position: 'absolute',
-        top: position.y - size / 2,
-        left: position.x - size / 2,
-        width: size,
-        height: size,
-        zIndex: 1300,
-      }}
       onClick={onClick}
+      className={css`
+        position: absolute;
+        top: ${position.y - size / 2}px;
+        left: ${position.x - size / 2}px;
+        width: ${size}px;
+        height: ${size}px;
+        z-index: 1300;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #cecece;
+        transition: background-color 150ms ease;
+        &:hover {
+          background-color: #ff7884;
+        }
+      `}
     >
-      x
-    </button>
+      <CloseFillIcon size={size} color={'#ffffff'} />
+    </div>
   );
 };
 
