@@ -521,6 +521,7 @@
       "@remirror/core-utils",
       "@remirror/extension-positioner",
       "@remirror/extension-tables",
+      "@remirror/icons",
       "@remirror/messages",
       "@remirror/preset-core",
       "@remirror/react-components",
