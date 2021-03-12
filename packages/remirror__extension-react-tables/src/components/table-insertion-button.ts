@@ -1,9 +1,9 @@
 import { css, cx } from '@emotion/css';
 import { h } from 'jsx-dom';
 import { EditorView, Transaction } from '@remirror/core';
+import { addFill } from '@remirror/icons/all';
 import { TableRect } from '@remirror/pm/tables';
 
-import { addFill } from '../../../remirror__core/node_modules/@remirror/icons/src/all-icons';
 import { addColumn, addRow } from '../react-table-commands';
 import { controllerAutoHide } from '../utils/style';
 
