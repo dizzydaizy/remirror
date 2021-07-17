@@ -8,7 +8,7 @@
  */
 
 import assert from 'assert';
-import { promises as fs, readdirSync, Stats } from 'fs';
+import { promises as fs, Stats } from 'fs';
 import glob from 'globby';
 import isBuiltinModule from 'is-builtin-module';
 import loadJson from 'load-json-file';
@@ -331,26 +331,16 @@ async function preloadRequiredLibraries(dtsCache: DtsCache) {
 
   // Get the folder for `.pnpm`.
   const pnpmFolder = baseDir('node_modules', '.pnpm');
-
-  const packages: Record<string, string[]> = {
-    '.': await fs.readdir(pnpmFolder),
-  };
+  const searchFolders = await fs.readdir(pnpmFolder);
 
   /** A function which retrieves the package folder for a given package name. */
   function getPackageFolder(name: string, subFolder = '') {
-    let searchFolders = packages['.'];
     let folderName = name;
-    let base = pnpmFolder;
 
     if (name.startsWith('@')) {
       const split = name.split('/');
-      const scope = assertGet(split, 0);
-      folderName = assertGet(split, 1);
-      base = baseDir('node_modules', '.pnpm', scope);
-      searchFolders = packages[scope] ??= readdirSync(base);
+      folderName = `${assertGet(split, 0)}+${assertGet(split, 1)}`;
     }
-
-    assert(searchFolders);
 
     // const searchFolders = inTypesFolder ? pnpmTypeFolders : pnpmFolders;
     const directory = searchFolders.find((name) => name.startsWith(`${folderName}@`));
@@ -360,7 +350,7 @@ async function preloadRequiredLibraries(dtsCache: DtsCache) {
       return '';
     }
 
-    return path.join(base, directory, 'node_modules', name, subFolder);
+    return path.join(pnpmFolder, directory, 'node_modules', name, subFolder);
   }
 
   // The list of packages that should be preloaded and the location of their root `*.d.ts` file.
@@ -818,7 +808,8 @@ function parseFileForModuleReferences(sourceCode: string): string[] {
 
   // Regex used to test for `imports` module reference -
   // https://regex101.com/r/hdEpzO/4
-  const es6Pattern = /(import|export)((?!from)(?!require)(.|\n))*?(from|require\()\s?('|")(.*)('|")\)?;?$/gm;
+  const es6Pattern =
+    /(import|export)((?!from)(?!require)(.|\n))*?(from|require\()\s?('|")(.*)('|")\)?;?$/gm;
 
   // Regex used to test for only es6 imports - https://regex101.com/r/hdEpzO/6
   const es6ImportOnly = /import\s?('|")(.*)('|")\)?;?/gm;
@@ -891,16 +882,21 @@ async function main() {
   });
 
   // Generate the code from the importGroups.
-  const { exports, dtsJson: json, modules, meta, playground, reactPlayground } = await generateCode(
-    {
-      pm,
-      extensions,
-      presets,
-      core,
-      react,
-      unscoped,
-    },
-  );
+  const {
+    exports,
+    dtsJson: json,
+    modules,
+    meta,
+    playground,
+    reactPlayground,
+  } = await generateCode({
+    pm,
+    extensions,
+    presets,
+    core,
+    react,
+    unscoped,
+  });
 
   // Write the files to the intended location.
   await formatAndWriteFiles([

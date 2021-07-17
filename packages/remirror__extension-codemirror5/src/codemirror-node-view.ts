@@ -2,6 +2,7 @@
  * Reference: https://prosemirror.net/examples/codemirror/
  */
 
+import { entries } from '@remirror/core';
 import type { EditorSchema, EditorView, NodeView, ProsemirrorNode } from '@remirror/pm';
 import { exitCode } from '@remirror/pm/commands';
 import { redo, undo } from '@remirror/pm/history';
@@ -72,7 +73,7 @@ export class CodeMirrorNodeView implements NodeView {
     this.#getPos = getPos;
 
     // Create a CodeMirror instance
-    this.#cm = ref.CodeMirror((null as unknown) as HTMLElement, {
+    this.#cm = ref.CodeMirror(null as unknown as HTMLElement, {
       value: this.#node.textContent,
       extraKeys: this.codeMirrorKeymap(),
       ...config,
@@ -335,15 +336,15 @@ function computeAttrsChange(
   const oldConfig: CodeMirror.EditorConfiguration = oldAttrs.codeMirrorConfig ?? {};
   const newConfig: CodeMirror.EditorConfiguration = newAttrs.codeMirrorConfig ?? {};
 
-  for (const key of Object.keys(oldConfig) as Array<keyof CodeMirror.EditorConfiguration>) {
-    if (oldConfig[key] !== newConfig[key]) {
-      deltaConfig[key] = newConfig[key];
+  for (const [key, value] of entries(oldConfig)) {
+    if (value !== newConfig[key]) {
+      deltaConfig[key] = newConfig[key] as any;
       updated = true;
     }
   }
 
   if (oldAttrs.language !== newAttrs.language) {
-    deltaConfig['mode'] = parseLanguageToMode(newAttrs.language);
+    deltaConfig.mode = parseLanguageToMode(newAttrs.language) ?? undefined;
     updated = true;
   }
 

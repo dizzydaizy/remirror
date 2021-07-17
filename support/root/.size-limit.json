@@ -41,6 +41,14 @@
     "gzip": true
   },
   {
+    "name": "prosemirror-resizable-view",
+    "limit": "5 KB",
+    "path": "packages/prosemirror-resizable-view/dist/prosemirror-resizable-view.browser.esm.js",
+    "ignore": ["@remirror/core-helpers"],
+    "running": false,
+    "gzip": true
+  },
+  {
     "name": "prosemirror-suggest",
     "limit": "10 KB",
     "path": "packages/prosemirror-suggest/dist/prosemirror-suggest.browser.esm.js",
@@ -181,9 +189,9 @@
   },
   {
     "name": "@remirror/extension-callout",
-    "limit": "5 KB",
+    "limit": "15 KB",
     "path": "packages/remirror__extension-callout/dist/remirror-extension-callout.browser.esm.js",
-    "ignore": ["@remirror/pm", "@remirror/core", "@remirror/messages"],
+    "ignore": ["@remirror/pm", "@remirror/core", "@remirror/messages", "@remirror/theme"],
     "running": false,
     "gzip": true
   },
@@ -354,7 +362,7 @@
   },
   {
     "name": "@remirror/extension-image",
-    "limit": "5 KB",
+    "limit": "20 KB",
     "path": "packages/remirror__extension-image/dist/remirror-extension-image.browser.esm.js",
     "ignore": ["@remirror/pm", "@remirror/core", "@remirror/messages", "@remirror/theme"],
     "running": false,
@@ -389,7 +397,8 @@
       "@remirror/pm",
       "@remirror/core",
       "@remirror/extension-events",
-      "@remirror/messages"
+      "@remirror/messages",
+      "@remirror/theme"
     ],
     "running": false,
     "gzip": true
@@ -633,7 +642,13 @@
     "name": "@remirror/extension-yjs",
     "limit": "115 KB",
     "path": "packages/remirror__extension-yjs/dist/remirror-extension-yjs.browser.esm.js",
-    "ignore": ["@remirror/pm", "yjs", "@remirror/core", "@remirror/messages"],
+    "ignore": [
+      "@remirror/pm",
+      "yjs",
+      "@remirror/core",
+      "@remirror/extension-annotation",
+      "@remirror/messages"
+    ],
     "running": false,
     "gzip": true
   },

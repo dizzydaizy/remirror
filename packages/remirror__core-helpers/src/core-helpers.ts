@@ -23,7 +23,7 @@ type TupleRange<Size extends number> = Size extends Size
   : never;
 type _NumberRangeTuple<
   Tuple extends readonly unknown[],
-  Length extends number
+  Length extends number,
 > = Tuple['length'] extends Length ? Tuple : _NumberRangeTuple<[...Tuple, Tuple['length']], Length>;
 
 /**
@@ -74,7 +74,7 @@ export function entries<
   Type extends object,
   Key extends Extract<keyof Type, string>,
   Value extends Type[Key],
-  Entry extends [Key, Value]
+  Entry extends [Key, Value],
 >(value: Type): Entry[] {
   return Object.entries(value) as Entry[];
 }
@@ -94,7 +94,7 @@ export function keys<Type extends object, Key extends Extract<keyof Type, string
 export function values<
   Type extends object,
   Key extends Extract<keyof Type, string>,
-  Value extends Type[Key]
+  Value extends Type[Key],
 >(value: Type): Value[] {
   return Object.values(value) as Value[];
 }

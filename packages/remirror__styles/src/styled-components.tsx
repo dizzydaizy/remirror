@@ -595,33 +595,35 @@ export const coreStyledCss: ReturnType<typeof css> = css`
     font-variant-ligatures: none;
     font-feature-settings: 'liga' 0;
     overflow-y: scroll;
-
-    /** TODO DELETE ME */
-    max-height: 200px;
-    height: 200px;
   }
-  /** END TODO */
+
   .remirror-editor.ProseMirror pre {
     white-space: pre-wrap;
   }
+
   .remirror-editor.ProseMirror li {
     position: relative;
   }
+
   .remirror-editor.ProseMirror[contenteditable='false'] {
     white-space: normal;
   }
+
   .remirror-editor.ProseMirror[contenteditable='true'] {
     white-space: pre-wrap;
   }
+
   .remirror-editor.ProseMirror hr {
     border-color: #2e2e2e;
   }
+
   .remirror-editor.ProseMirror ::-moz-selection {
     background: var(--rmr-color-selection-background);
     color: var(--rmr-color-selection-text);
     caret-color: var(--rmr-color-selection-caret);
     text-shadow: var(--rmr-color-selection-shadow);
   }
+
   .remirror-editor.ProseMirror ::selection,
   .remirror-editor.ProseMirror .selection {
     background: var(--rmr-color-selection-background);
@@ -629,16 +631,16 @@ export const coreStyledCss: ReturnType<typeof css> = css`
     caret-color: var(--rmr-color-selection-caret);
     text-shadow: var(--rmr-color-selection-shadow);
   }
-  .remirror-editor .ProseMirror-hideselection *::-moz-selection {
+  .remirror-editor.ProseMirror-hideselection *::-moz-selection {
     background: transparent;
   }
-  .remirror-editor .ProseMirror-hideselection *::selection {
+  .remirror-editor.ProseMirror-hideselection *::selection {
     background: transparent;
   }
-  .remirror-editor .ProseMirror-hideselection *::-moz-selection {
+  .remirror-editor.ProseMirror-hideselection *::-moz-selection {
     background: transparent;
   }
-  .remirror-editor .ProseMirror-hideselection {
+  .remirror-editor.ProseMirror-hideselection {
     caret-color: transparent;
   }
   .remirror-editor .ProseMirror-selectednode {
@@ -668,14 +670,14 @@ export const extensionBlockquoteStyledCss: ReturnType<typeof css> = css`
   /**
  * Styles extracted from: packages/remirror__theme/src/extension-blockquote-theme.ts
  */
-  .remirror-editor.Prosemirror blockquote {
+  .remirror-editor.ProseMirror blockquote {
     border-left: 3px solid var(--rmr-hue-gray-3);
     margin-left: 0;
     margin-right: 0;
     padding-left: 10px;
     font-style: italic;
   }
-  .remirror-editor.Prosemirror blockquote p {
+  .remirror-editor.ProseMirror blockquote p {
     color: #888;
   }
 `;
@@ -689,10 +691,16 @@ export const extensionCalloutStyledCss: ReturnType<typeof css> = css`
  * Styles extracted from: packages/remirror__theme/src/extension-callout-theme.ts
  */
   .remirror-editor div[data-callout-type] {
-    border-left: 2px solid transparent;
+    display: flex;
     margin-left: 0;
     margin-right: 0;
-    padding-left: 10px;
+    padding: 10px;
+    border-left: 2px solid transparent;
+  }
+
+  .remirror-editor div[data-callout-type] > :not(.remirror-callout-emoji-wrapper) {
+    margin-left: 8px;
+    flex-grow: 1;
   }
   .remirror-editor div[data-callout-type='info'] {
     background: #eef6fc;
@@ -709,6 +717,9 @@ export const extensionCalloutStyledCss: ReturnType<typeof css> = css`
   .remirror-editor div[data-callout-type='success'] {
     background: #effaf3;
     border-left-color: #48c774;
+  }
+  .remirror-editor div[data-callout-type='blank'] {
+    background: #f8f8f8;
   }
 `;
 
@@ -3581,7 +3592,78 @@ export const extensionListStyledCss: ReturnType<typeof css> = css`
   /**
  * Styles extracted from: packages/remirror__theme/src/extension-list-theme.ts
  */
-  .remirror-editor {
+  /* don't show the custom markers in a ordered list */
+  .remirror-editor ol > li > .remirror-list-item-marker-container {
+    display: none;
+  }
+  /* don't show the origin markers when using custom markers (checkbox / collapsible) */
+  .remirror-editor ul > li.remirror-list-item-with-custom-mark {
+    list-style: none;
+  }
+  .remirror-editor .remirror-ul-list-content > li.remirror-list-item-with-custom-mark {
+    list-style: none;
+  }
+
+  .remirror-list-item-marker-container {
+    position: absolute;
+    left: -32px;
+    width: 24px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .remirror-list-item-checkbox {
+    /* change the checkbox color from blue (default on Chrome) to purple. */
+    -webkit-filter: hue-rotate(60deg);
+    filter: hue-rotate(60deg);
+  }
+
+  .remirror-collapsible-list-item-closed li {
+    display: none;
+  }
+
+  .remirror-collapsible-list-item-closed .remirror-collapsible-list-item-button {
+    background-color: var(--rmr-hue-gray-6);
+  }
+
+  .remirror-collapsible-list-item-button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+
+    transition: background-color 0.25s ease;
+    background-color: var(--rmr-color-border);
+  }
+
+  .remirror-collapsible-list-item-button:hover {
+    background-color: var(--rmr-color-primary);
+  }
+
+  .remirror-collapsible-list-item-button.disabled,
+  .remirror-collapsible-list-item-button.disabled:hover {
+    background-color: var(--rmr-color-border);
+    cursor: default;
+  }
+
+  .remirror-list-spine {
+    position: absolute;
+    top: 4px;
+    bottom: 0px;
+    left: -20px;
+    width: 16px;
+    cursor: pointer;
+
+    transition: border-left-color 0.25s ease;
+    border-left-color: var(--rmr-color-border);
+    border-left-style: solid;
+    border-left-width: 1px;
+  }
+
+  .remirror-list-spine:hover {
+    border-left-color: var(--rmr-color-primary);
   }
 `;
 
@@ -3663,7 +3745,7 @@ export const extensionNodeFormattingStyledCss: ReturnType<typeof css> = css`
   /**
  * Styles extracted from: packages/remirror__theme/src/extension-node-formatting-theme.ts
  */
-  .remirror-editor.Prosemirror {
+  .remirror-editor.ProseMirror {
   }
 `;
 

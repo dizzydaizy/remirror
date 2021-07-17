@@ -17,11 +17,6 @@ export const EDITOR = css`
     font-feature-settings: 'liga' 0;
     overflow-y: scroll;
 
-    /** TODO DELETE ME */
-    max-height: 200px;
-    height: 200px;
-    /** END TODO */
-
     pre {
       white-space: pre-wrap;
     }
@@ -51,15 +46,15 @@ export const EDITOR = css`
     }
   }
 
-  .ProseMirror-hideselection *::selection {
+  &.ProseMirror-hideselection *::selection {
     background: transparent;
   }
 
-  .ProseMirror-hideselection *::-moz-selection {
+  &.ProseMirror-hideselection *::-moz-selection {
     background: transparent;
   }
 
-  .ProseMirror-hideselection {
+  &.ProseMirror-hideselection {
     caret-color: transparent;
   }
 

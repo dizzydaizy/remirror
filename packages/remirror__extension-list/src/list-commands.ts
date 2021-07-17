@@ -1,6 +1,8 @@
 import {
+  AnyExtension,
   chainableEditorState,
   CommandFunction,
+  DispatchFunction,
   ExtensionTag,
   findParentNode,
   getNodeType,
@@ -9,10 +11,10 @@ import {
   ProsemirrorAttributes,
   ProsemirrorNode,
 } from '@remirror/core';
-import { Fragment, Slice } from '@remirror/pm/model';
-import { liftListItem, wrapInList } from '@remirror/pm/schema-list';
-import { Selection } from '@remirror/pm/state';
-import { canSplit } from '@remirror/pm/transform';
+import { Fragment, NodeRange, Slice } from '@remirror/pm/model';
+import { liftListItem, sinkListItem, wrapInList } from '@remirror/pm/schema-list';
+import { EditorState, Selection } from '@remirror/pm/state';
+import { canSplit, ReplaceAroundStep } from '@remirror/pm/transform';
 
 /**
  * Checks to see whether this is a list node.
@@ -72,15 +74,16 @@ export function toggleList(type: NodeType, itemType: NodeType): CommandFunction 
   };
 }
 
-// :: (NodeType) → (state: EditorState, dispatch: ?(tr: Transaction)) → bool
-// Build a command that splits a non-empty textblock at the top level
-// of a list item by also splitting that list item.
+/**
+ * Build a command that splits a non-empty textblock at the top level
+ * of a list item by also splitting that list item.
+ */
 export function splitListItem(
-  listItemType: string | NodeType,
-  persistedAttributes: string[] = [],
+  listItemTypeOrName: string | NodeType,
+  ignoreAttrs: string[] = ['checked'],
 ): CommandFunction {
   return function ({ tr, dispatch, state }) {
-    const type = getNodeType(listItemType, state.schema);
+    const listItemType = getNodeType(listItemTypeOrName, state.schema);
     const { $from, $to } = tr.selection;
 
     if (
@@ -99,14 +102,8 @@ export function splitListItem(
     // as the list item type.
     const grandParent = $from.node(-1);
 
-    if (grandParent.type !== type) {
+    if (grandParent.type !== listItemType) {
       return false;
-    }
-
-    const attrs: ProsemirrorAttributes = {};
-
-    for (const name of persistedAttributes) {
-      attrs[name] = grandParent.attrs[name];
     }
 
     if ($from.parent.content.size === 0 && $from.node(-1).childCount === $from.indexAfter(-1)) {
@@ -115,7 +112,7 @@ export function splitListItem(
       // command handle lifting.
       if (
         $from.depth === 2 ||
-        $from.node(-3).type !== type ||
+        $from.node(-3).type !== listItemType ||
         $from.index(-2) !== $from.node(-2).childCount - 1
       ) {
         return false;
@@ -131,16 +128,9 @@ export function splitListItem(
           wrap = Fragment.from($from.node(depth).copy(wrap));
         }
 
-        // type.contentMatch.defaultType?
+        const content = listItemType.contentMatch.defaultType?.createAndFill() || undefined;
 
-        // Add a second list item with an empty default start node
-        const createdNode = type.createAndFill(attrs);
-
-        if (!createdNode) {
-          return false;
-        }
-
-        wrap = wrap.append(Fragment.from(createdNode));
+        wrap = wrap.append(Fragment.from(listItemType.createAndFill(null, content) || undefined));
 
         tr.replace(
           $from.before(keepItem ? undefined : -1),
@@ -158,29 +148,194 @@ export function splitListItem(
       return true;
     }
 
-    const nextType = $to.pos === $from.end() ? grandParent.contentMatchAt(0).defaultType : null;
+    const listItemAttributes = Object.fromEntries(
+      Object.entries(grandParent.attrs).filter(([attr]) => !ignoreAttrs.includes(attr)),
+    );
+
+    // The content inside the list item (e.g. paragraph)
+    const contentType = $to.pos === $from.end() ? grandParent.contentMatchAt(0).defaultType : null;
+    const contentAttributes = { ...$from.node().attrs };
+
     tr.delete($from.pos, $to.pos);
 
-    const types = [{ type, attrs }];
+    const types: TypesAfter = contentType
+      ? [
+          { type: listItemType, attrs: listItemAttributes },
+          { type: contentType, attrs: contentAttributes },
+        ]
+      : [{ type: listItemType, attrs: listItemAttributes }];
 
-    if (nextType) {
-      const attrs: ProsemirrorAttributes = {};
-
-      for (const name of persistedAttributes) {
-        attrs[name] = $from.node().attrs[name];
-      }
-
-      types.push({ type: nextType, attrs });
-    }
-
-    if (!canSplit(tr.doc, $from.pos, 2, types)) {
+    if (!canSplit(tr.doc, $from.pos, 2)) {
+      // I can't use `canSplit(tr.doc, $from.pos, 2, types)` and I don't know why
       return false;
     }
 
     if (dispatch) {
+      // @ts-expect-error TODO: types for `tr.split` need to be fixed in `@types/prosemirror-transform`
       dispatch(tr.split($from.pos, 2, types).scrollIntoView());
     }
 
+    return true;
+  };
+}
+
+type TypeAfter = { type: NodeType; attrs: ProsemirrorAttributes } | null | undefined;
+type TypesAfter = TypeAfter[];
+
+/**
+ * Get all list item node type names in currect schema
+ */
+function getAllListItemNames(allExtensions: AnyExtension[]): string[] {
+  return allExtensions
+    .filter((extension) => extension.tags.includes(ExtensionTag.ListItemNode))
+    .map((extension) => extension.name);
+}
+
+/**
+ * Get all list item node types from current selection. Sort from deepest to root.
+ */
+function getOrderedListItemTypes(
+  listItemNames: string[],
+  state: EditorState,
+): Map<string, NodeType> {
+  const { $from, $to } = state.selection;
+  const sharedDepth = $from.sharedDepth($to.pos);
+  const listItemTypes = new Map<string, NodeType>();
+
+  for (let depth = sharedDepth; depth >= 0; depth--) {
+    const type = $from.node(depth).type;
+
+    if (listItemNames.includes(type.name) && !listItemTypes.has(type.name)) {
+      listItemTypes.set(type.name, type);
+    }
+  }
+
+  return listItemTypes;
+}
+
+/**
+ * Create a command to sink the list item around the selection down into an
+ * inner list. Use this function if you get multiple list item nodes in your
+ * schema.
+ */
+export function sharedSinkListItem(allExtensions: AnyExtension[]): CommandFunction {
+  const listItemNames = getAllListItemNames(allExtensions);
+
+  return function ({ dispatch, state }) {
+    const listItemTypes = getOrderedListItemTypes(listItemNames, state);
+
+    for (const type of listItemTypes.values()) {
+      if (sinkListItem(type)(state, dispatch)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+}
+
+/**
+ * Create a command to lift the list item around the selection up intoa wrapping
+ * list. Use this function if you get multiple list item nodes in your schema.
+ */
+export function sharedLiftListItem(allExtensions: AnyExtension[]): CommandFunction {
+  const listItemNames = getAllListItemNames(allExtensions);
+
+  return function ({ dispatch, state }) {
+    const listItemTypes = getOrderedListItemTypes(listItemNames, state);
+
+    for (const type of listItemTypes.values()) {
+      if (liftListItem(type)(state, dispatch)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+}
+
+// Copied from `prosemirror-schema-list`
+function liftOutOfList(state: EditorState, dispatch: DispatchFunction, range: NodeRange) {
+  const tr = state.tr,
+    list = range.parent;
+
+  // Merge the list items into a single big item
+  for (let pos = range.end, i = range.endIndex - 1, e = range.startIndex; i > e; i--) {
+    pos -= list.child(i).nodeSize;
+    tr.delete(pos - 1, pos + 1);
+  }
+
+  const $start = tr.doc.resolve(range.start),
+    item = $start.nodeAfter;
+  const atStart = range.startIndex === 0,
+    atEnd = range.endIndex === list.childCount;
+  const parent = $start.node(-1),
+    indexBefore = $start.index(-1);
+
+  if (!item) {
+    return false;
+  }
+
+  if (
+    !parent.canReplace(
+      indexBefore + (atStart ? 0 : 1),
+      indexBefore + 1,
+      item.content.append(atEnd ? Fragment.empty : Fragment.from(list)),
+    )
+  ) {
+    return false;
+  }
+
+  const start = $start.pos,
+    end = start + item.nodeSize;
+  // Strip off the surrounding list. At the sides where we're not at
+  // the end of the list, the existing list is closed. At sides where
+  // this is the end, it is overwritten to its end.
+  tr.step(
+    new ReplaceAroundStep(
+      start - (atStart ? 1 : 0),
+      end + (atEnd ? 1 : 0),
+      start + 1,
+      end - 1,
+      new Slice(
+        (atStart ? Fragment.empty : Fragment.from(list.copy(Fragment.empty))).append(
+          atEnd ? Fragment.empty : Fragment.from(list.copy(Fragment.empty)),
+        ),
+        atStart ? 0 : 1,
+        atEnd ? 0 : 1,
+      ),
+      atStart ? 0 : 1,
+    ),
+  );
+  dispatch(tr.scrollIntoView());
+  return true;
+}
+
+/**
+ * Build a command to lift the content inside a list item around the selection
+ * out of list
+ */
+export function liftListItemOutOfList(itemType: NodeType): CommandFunction {
+  return (props) => {
+    const { dispatch, tr } = props;
+    const state = chainableEditorState(tr, props.state);
+    const { $from, $to } = tr.selection;
+
+    const range = $from.blockRange(
+      $to,
+      // @ts-expect-error this line of code is copied from `prosemirror-schema-list`
+      (node) => node.childCount && node.firstChild.type === itemType,
+    );
+
+    if (!dispatch) {
+      return true;
+    }
+
+    if (!range) {
+      return false;
+    }
+
+    liftOutOfList(state, dispatch, range);
     return true;
   };
 }

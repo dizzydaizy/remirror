@@ -15,14 +15,21 @@ import {
   NodeExtensionSpec,
   nodeInputRule,
   NodeSpecOverride,
+  NodeViewMethod,
   omitExtraAttributes,
+  ProsemirrorNode,
   toggleWrap,
 } from '@remirror/core';
+import { Fragment, Slice } from '@remirror/pm/model';
 import { TextSelection } from '@remirror/pm/state';
+import { EditorView } from '@remirror/pm/view';
+import { ExtensionCalloutTheme } from '@remirror/theme';
 
 import type { CalloutAttributes, CalloutOptions } from './callout-types';
 import {
+  dataAttributeEmoji,
   dataAttributeType,
+  defaultEmojiRender,
   getCalloutType,
   toggleCalloutOptions,
   updateNodeAttributes,
@@ -34,9 +41,11 @@ import {
 @extension<CalloutOptions>({
   defaultOptions: {
     defaultType: 'info',
-    validTypes: ['info', 'warning', 'error', 'success'],
+    validTypes: ['info', 'warning', 'error', 'success', 'blank'],
+    defaultEmoji: '',
+    renderEmoji: defaultEmojiRender,
   },
-  staticKeys: ['defaultType', 'validTypes'],
+  staticKeys: ['defaultType', 'validTypes', 'defaultEmoji'],
 })
 export class CalloutExtension extends NodeExtension<CalloutOptions> {
   get name() {
@@ -45,15 +54,47 @@ export class CalloutExtension extends NodeExtension<CalloutOptions> {
 
   readonly tags = [ExtensionTag.Block];
 
+  /**
+   * Defines the callout html structure.
+   * Adds the returned DOM node form `renderEmoji`  into it.
+   */
+  createNodeViews(): NodeViewMethod {
+    return (node: ProsemirrorNode, view: EditorView, getPos: boolean | (() => number)) => {
+      const { type, emoji } = node.attrs;
+      const { renderEmoji } = this.options;
+      const dom = document.createElement('div');
+      const contentDOM = document.createElement('div');
+      dom.setAttribute(dataAttributeType, type);
+
+      if (emoji) {
+        const emojiWrapper = document.createElement('div');
+        const emojiNode = renderEmoji(node, view, getPos as () => number);
+
+        dom.setAttribute(dataAttributeEmoji, emoji);
+        emojiWrapper.classList.add(ExtensionCalloutTheme.CALLOUT_EMOJI_WRAPPER);
+
+        if (emojiNode) {
+          emojiWrapper.append(emojiNode);
+          dom.append(emojiWrapper);
+        }
+      }
+
+      dom.append(contentDOM);
+      return { dom, contentDOM };
+    };
+  }
+
   createNodeSpec(extra: ApplySchemaAttributes, override: NodeSpecOverride): NodeExtensionSpec {
+    const { defaultType, validTypes, defaultEmoji } = this.options;
     return {
-      content: 'block*',
+      content: 'block+',
       defining: true,
       draggable: false,
       ...override,
       attrs: {
         ...extra.defaults(),
-        type: { default: this.options.defaultType },
+        type: { default: defaultType },
+        emoji: { default: defaultEmoji },
       },
       parseDOM: [
         {
@@ -63,25 +104,34 @@ export class CalloutExtension extends NodeExtension<CalloutOptions> {
               return false;
             }
 
-            const type = node.getAttribute(dataAttributeType);
+            const rawType = node.getAttribute(dataAttributeType);
+            const emoji: string = node.getAttribute(dataAttributeEmoji) ?? '';
+
+            const type = getCalloutType(rawType, validTypes, defaultType);
             const content = node.textContent;
-            return { ...extra.parse(node), type, content };
+            return { ...extra.parse(node), type, emoji, content };
           },
         },
         ...(override.parseDOM ?? []),
       ],
       toDOM: (node) => {
-        const { type, ...rest } = omitExtraAttributes(node.attrs, extra);
-        const attributes = { ...extra.dom(node), ...rest, [dataAttributeType]: type };
-
+        const { type, emoji, ...rest } = omitExtraAttributes(node.attrs, extra);
+        const emojiAttributes = emoji ? { [dataAttributeEmoji]: emoji } : {};
+        const attributes = {
+          ...extra.dom(node),
+          ...rest,
+          [dataAttributeType]: type,
+          ...emojiAttributes,
+        };
         return ['div', attributes, 0];
       },
     };
   }
 
   /**
-   * Create an input rule that listens converts the code fence into a code block
-   * when typing triple back tick followed by a space.
+   * Create an input rule that listens for input of 3 colons followed
+   * by a valid callout type, to create a callout node
+   * If the callout type is invalid, the defaultType callout is created
    */
   createInputRules(): InputRule[] {
     return [
@@ -108,12 +158,12 @@ export class CalloutExtension extends NodeExtension<CalloutOptions> {
    * lifted out of the callout node.
    *
    * ```ts
-   * if (commands.toggleCallout.isEnabled()) {
+   * if (commands.toggleCallout.enabled()) {
    *   commands.toggleCallout({ type: 'success' });
    * }
    * ```
    */
-  @command()
+  @command(toggleCalloutOptions)
   toggleCallout(attributes: CalloutAttributes = {}): CommandFunction {
     return toggleWrap(this.type, attributes);
   }
@@ -123,14 +173,14 @@ export class CalloutExtension extends NodeExtension<CalloutOptions> {
    * to change the type.
    *
    * ```ts
-   * if (commands.updateCallout.isEnabled()) {
+   * if (commands.updateCallout.enabled()) {
    *   commands.updateCallout({ type: 'error' });
    * }
    * ```
    */
   @command(toggleCalloutOptions)
-  updateCallout(attributes: CalloutAttributes): CommandFunction {
-    return updateNodeAttributes(this.type)(attributes);
+  updateCallout(attributes: CalloutAttributes, pos?: number): CommandFunction {
+    return updateNodeAttributes(this.type)(attributes, pos);
   }
 
   @keyBinding({ shortcut: 'Enter' })
@@ -168,9 +218,10 @@ export class CalloutExtension extends NodeExtension<CalloutOptions> {
     // +1 to account for the extra pos a node takes up
 
     if (dispatch) {
-      tr.replaceWith(pos, end, this.type.create({ type }));
+      const slice = new Slice(Fragment.from(this.type.create({ type })), 0, 1);
+      tr.replace(pos, end, slice);
 
-      // Set the selection to within the codeBlock
+      // Set the selection to within the callout
       tr.setSelection(TextSelection.create(tr.doc, pos + 1));
       dispatch(tr);
     }

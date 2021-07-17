@@ -1,4 +1,4 @@
-import type { MimeType } from 'codemirror/mode/meta';
+import type { ModeInfo } from 'codemirror/mode/meta';
 import { CommandFunction, findParentNodeOfType, isEqual, NodeType } from '@remirror/core';
 import { Selection } from '@remirror/pm/state';
 
@@ -43,25 +43,23 @@ export function arrowHandler(dir: 'left' | 'right' | 'up' | 'down'): CommandFunc
  * This is used to update the language for the CodeMirror block.
  */
 export function updateNodeAttributes(type: NodeType) {
-  return (attributes: CodeMirrorExtensionAttributes): CommandFunction => ({
-    state: { tr, selection },
-    dispatch,
-  }) => {
-    const parent = findParentNodeOfType({ types: type, selection });
+  return (attributes: CodeMirrorExtensionAttributes): CommandFunction =>
+    ({ state: { tr, selection }, dispatch }) => {
+      const parent = findParentNodeOfType({ types: type, selection });
 
-    if (!parent || isEqual(attributes, parent.node.attrs)) {
-      // Do nothing since the attrs are the same
-      return false;
-    }
+      if (!parent || isEqual(attributes, parent.node.attrs)) {
+        // Do nothing since the attrs are the same
+        return false;
+      }
 
-    tr.setNodeMarkup(parent.pos, type, { ...parent.node.attrs, ...attributes });
+      tr.setNodeMarkup(parent.pos, type, { ...parent.node.attrs, ...attributes });
 
-    if (dispatch) {
-      dispatch(tr);
-    }
+      if (dispatch) {
+        dispatch(tr);
+      }
 
-    return true;
-  };
+      return true;
+    };
 }
 
 /**
@@ -69,7 +67,7 @@ export function updateNodeAttributes(type: NodeType) {
  */
 export function parseLanguageToMode(language?: string): string | null {
   if (language) {
-    let mime: MimeType | undefined;
+    let mime: ModeInfo | undefined;
 
     if ((mime = ref.CodeMirror.findModeByName(language))) {
       return mime.mode;

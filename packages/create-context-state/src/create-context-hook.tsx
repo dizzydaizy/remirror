@@ -157,7 +157,7 @@ export interface ContextHook<Context extends object> {
  */
 export type Split<
   Input extends string,
-  Splitter extends string
+  Splitter extends string,
 > = Input extends `${infer T}${Splitter}${infer Rest}`
   ? '' extends T
     ? [...Split<Rest, Splitter>]
@@ -166,7 +166,7 @@ export type Split<
 
 export type SplitEmpty<
   Input extends string,
-  Splitter extends string
+  Splitter extends string,
 > = Input extends `${infer T}${Splitter}${infer Rest}` ? [T, ...Split<Rest, Splitter>] : [Input];
 
 function usePrevious<T>(value: T) {

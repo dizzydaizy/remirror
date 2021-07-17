@@ -1,13 +1,16 @@
 import {
+  absolutePositionToRelativePosition,
   defaultCursorBuilder,
   redo,
+  relativePositionToAbsolutePosition,
   undo,
   yCursorPlugin,
   ySyncPlugin,
+  ySyncPluginKey,
   yUndoPlugin,
   yUndoPluginKey,
 } from 'y-prosemirror';
-import type { Doc, UndoManager } from 'yjs';
+import type { Doc, RelativePosition, Transaction as YjsTransaction, UndoManager } from 'yjs';
 import {
   AcceptUndefined,
   command,
@@ -30,6 +33,7 @@ import {
   Selection,
   Shape,
 } from '@remirror/core';
+import { AnnotationExtension } from '@remirror/extension-annotation';
 import { ExtensionHistoryMessages as Messages } from '@remirror/messages';
 
 export interface ColorDef {
@@ -140,6 +144,30 @@ export class YjsExtension extends PlainExtension<YjsOptions> {
     const { getProvider } = this.options;
 
     return (this._provider ??= getLazyValue(getProvider));
+  }
+
+  onView(): void {
+    try {
+      this.store.manager.getExtension(AnnotationExtension).setOptions({
+        getMap: () => this.provider.doc.getMap('annotations'),
+        transformPosition: this.absolutePositionToRelativePosition.bind(this),
+        transformPositionBeforeRender: this.relativePositionToAbsolutePosition.bind(this),
+      });
+
+      this.provider.doc.on(
+        'update',
+        (_update: Uint8Array, _origin: any, _doc: Doc, yjsTr: YjsTransaction) => {
+          // Ignore own changes
+          if (yjsTr.local) {
+            return;
+          }
+
+          this.store.commands.redrawAnnotations?.();
+        },
+      );
+    } catch {
+      // AnnotationExtension isn't present in editor
+    }
   }
 
   /**
@@ -287,6 +315,18 @@ export class YjsExtension extends PlainExtension<YjsOptions> {
   @keyBinding({ shortcut: NamedShortcut.Redo, command: 'yRedo' })
   redoShortcut(props: KeyBindingProps): boolean {
     return this.yRedo()(props);
+  }
+
+  private absolutePositionToRelativePosition(pos: number): RelativePosition {
+    const state = this.store.getState();
+    const { type, binding } = ySyncPluginKey.getState(state);
+    return absolutePositionToRelativePosition(pos, type, binding.mapping);
+  }
+
+  private relativePositionToAbsolutePosition(relPos: RelativePosition): number | null {
+    const state = this.store.getState();
+    const { type, binding } = ySyncPluginKey.getState(state);
+    return relativePositionToAbsolutePosition(this.provider.doc, type, relPos, binding.mapping);
   }
 }
 

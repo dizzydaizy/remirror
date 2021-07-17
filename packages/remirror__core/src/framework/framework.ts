@@ -55,8 +55,9 @@ import type {
 export abstract class Framework<
   Extension extends AnyExtension = BuiltinPreset,
   Props extends FrameworkProps<Extension> = FrameworkProps<Extension>,
-  Output extends FrameworkOutput<Extension> = FrameworkOutput<Extension>
-> implements BaseFramework<Extension> {
+  Output extends FrameworkOutput<Extension> = FrameworkOutput<Extension>,
+> implements BaseFramework<Extension>
+{
   /**
    * The schema available via the provided extensions.
    *
@@ -391,11 +392,13 @@ export abstract class Framework<
    * Use this method in the `onUpdate` event to run all change handlers.
    */
   readonly onChange = (props: ListenerProps<Extension> = object()): void => {
-    this.props.onChange?.(this.eventListenerProps(props));
+    const onChangeProps = this.eventListenerProps(props);
 
     if (this.#firstRender) {
       this.#firstRender = false;
     }
+
+    this.props.onChange?.(onChangeProps);
   };
 
   /**

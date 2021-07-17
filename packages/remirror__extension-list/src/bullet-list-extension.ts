@@ -12,9 +12,14 @@ import {
   NodeExtension,
   NodeExtensionSpec,
   NodeSpecOverride,
+  NodeViewMethod,
+  ProsemirrorNode,
+  Static,
 } from '@remirror/core';
 import { ExtensionListMessages as Messages } from '@remirror/messages';
 import { InputRule, wrappingInputRule } from '@remirror/pm/inputrules';
+import { NodeSelection } from '@remirror/pm/state';
+import { ExtensionListTheme } from '@remirror/theme';
 
 import { toggleList } from './list-commands';
 import { ListItemExtension } from './list-item-extension';
@@ -22,8 +27,11 @@ import { ListItemExtension } from './list-item-extension';
 /**
  * Create the node for a bullet list.
  */
-@extension({})
-export class BulletListExtension extends NodeExtension {
+@extension<BulletListOptions>({
+  defaultOptions: { enableSpine: false },
+  staticKeys: ['enableSpine'],
+})
+export class BulletListExtension extends NodeExtension<BulletListOptions> {
   get name() {
     return 'bulletList' as const;
   }
@@ -42,8 +50,58 @@ export class BulletListExtension extends NodeExtension {
     };
   }
 
+  createNodeViews(): NodeViewMethod | Record<string, never> {
+    if (!this.options.enableSpine) {
+      return {};
+    }
+
+    return (_, view, getPos) => {
+      const dom = document.createElement('ul');
+      dom.style.position = 'relative';
+
+      const pos = (getPos as () => number)();
+      const $pos = view.state.doc.resolve(pos + 1);
+
+      const parentListItemNode: ProsemirrorNode | undefined = $pos.node($pos.depth - 1);
+
+      const isFirstLevel = parentListItemNode?.type?.name !== 'listItem';
+
+      if (!isFirstLevel) {
+        const parentListItemPos: number = $pos.start($pos.depth - 1);
+
+        const spine = document.createElement('div');
+        spine.contentEditable = 'false';
+        spine.classList.add(ExtensionListTheme.LIST_SPINE);
+
+        spine.addEventListener('click', (event) => {
+          const selection = NodeSelection.create(view.state.doc, parentListItemPos - 1);
+          view.dispatch(view.state.tr.setSelection(selection));
+          this.store.commands.toggleListItemClosed();
+
+          event.preventDefault();
+          event.stopPropagation();
+        });
+        dom.append(spine);
+      }
+
+      const contentDOM = document.createElement('div');
+      contentDOM.classList.add(ExtensionListTheme.UL_LIST_CONTENT);
+      dom.append(contentDOM);
+
+      return {
+        dom,
+        contentDOM,
+      };
+    };
+  }
+
   createExtensions() {
-    return [new ListItemExtension({ priority: ExtensionPriority.Low })];
+    return [
+      new ListItemExtension({
+        priority: ExtensionPriority.Low,
+        enableCollapsible: this.options.enableSpine,
+      }),
+    ];
   }
 
   /**
@@ -62,6 +120,13 @@ export class BulletListExtension extends NodeExtension {
   createInputRules(): InputRule[] {
     return [wrappingInputRule(/^\s*([*+-])\s$/, this.type)];
   }
+}
+
+export interface BulletListOptions {
+  /**
+   * Set this to true to add a spine.
+   */
+  enableSpine?: Static<boolean>;
 }
 
 declare global {

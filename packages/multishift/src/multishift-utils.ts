@@ -487,11 +487,8 @@ type GetLastHighlightProps = Pick<
  * Returns -1 when no highlighted index is found.
  */
 export function getMostRecentHighlightIndex(lastHighlight: GetLastHighlightProps): number {
-  const {
-    highlightedGroupEndIndex,
-    highlightedGroupStartIndex,
-    highlightedIndexes,
-  } = lastHighlight;
+  const { highlightedGroupEndIndex, highlightedGroupStartIndex, highlightedIndexes } =
+    lastHighlight;
 
   const lastIndex = last(highlightedIndexes);
   return isValidIndex(highlightedGroupEndIndex)
@@ -660,13 +657,7 @@ export function getChangesFromItemClick<Item = any>({
   props,
   getItemId,
 }: GetChangesFromItemClickProps<Item>): MultishiftStateProps<Item> {
-  const selectedItem = assertGet(items, index);
-  const selectedItems = toggleSelectedItems(
-    state.selectedItems,
-    [selectedItem],
-    getItemId,
-    props.multiple,
-  );
+  const selectedItem = items[index];
   const isOpen = props.multiple ? true : defaultState.isOpen;
   const params = { state, getItemId };
   const defaultReturn: MultishiftStateProps<Item> = {
@@ -678,6 +669,13 @@ export function getChangesFromItemClick<Item = any>({
     // TODO check if this logic is desirable
     return { ...defaultReturn, isOpen };
   }
+
+  const selectedItems = toggleSelectedItems(
+    state.selectedItems,
+    [selectedItem],
+    getItemId,
+    props.multiple,
+  );
 
   // Check if the modifier for selecting multiple items is pressed.
   const shiftKeyPressed = modifiers.includes('shiftKey');
@@ -1022,7 +1020,7 @@ export function callAllEventHandlers<
   Type extends Event = any,
   Node extends Element = any,
   Synth extends SyntheticEvent<Element, Type> = SyntheticEvent<Node, Type>,
-  Method extends (event: Synth, ...args: any[]) => void | undefined | false | true = AnyFunction
+  Method extends (event: Synth, ...args: any[]) => void | undefined | false | true = AnyFunction,
 >(...fns: Array<Method | undefined | null | false>) {
   return (event: Synth, ...args: any[]): void => {
     fns.some((fn) => {
@@ -1038,7 +1036,7 @@ export function callAllEventHandlers<
 function bindActionCreator<
   Action,
   Creator extends ActionCreator<Action>,
-  ActionDispatch extends Dispatch<any>
+  ActionDispatch extends Dispatch<any>,
 >(actionCreator: Creator, dispatch: ActionDispatch) {
   return (...args: Parameters<Creator>) => dispatch(actionCreator(...args));
 }
@@ -1051,7 +1049,7 @@ function bindActionCreator<
 export function bindActionCreators<
   Action,
   CreatorMap extends ActionCreatorsMapObject<Action>,
-  ActionDispatch extends Dispatch<any>
+  ActionDispatch extends Dispatch<any>,
 >(actionCreators: CreatorMap, dispatch: ActionDispatch): ActionCreatorMapToDispatch<CreatorMap> {
   const boundActionCreators: ActionCreatorMapToDispatch<CreatorMap> = object();
   const creatorKeys = keys(actionCreators);

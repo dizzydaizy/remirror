@@ -1,29 +1,33 @@
 import {
   ApplySchemaAttributes,
-  convertCommand,
-  cx,
+  command,
+  CommandFunction,
   extension,
+  ExtensionPriority,
   ExtensionTag,
-  findChildren,
+  isBoolean,
+  isNodeSelection,
   KeyBindings,
   NodeExtension,
   NodeExtensionSpec,
   NodeSpecOverride,
-  omitExtraAttributes,
+  NodeViewMethod,
   ProsemirrorAttributes,
   Static,
 } from '@remirror/core';
-import { CreateEventHandlers } from '@remirror/extension-events';
-import { liftListItem, sinkListItem, splitListItem } from '@remirror/pm/schema-list';
+import { NodeSelection } from '@remirror/pm/state';
+import { ExtensionListTheme } from '@remirror/theme';
 
-import { isList } from './list-commands';
+import { liftListItemOutOfList, splitListItem } from './list-commands';
+import { createCustomMarkListItemNodeView } from './list-item-node-view';
+import { ListItemSharedExtension } from './list-item-shared-extension';
 
 /**
  * Creates the node for a list item.
  */
 @extension<ListItemOptions>({
-  defaultOptions: { enableToggle: false },
-  staticKeys: ['enableToggle'],
+  defaultOptions: { enableCollapsible: false },
+  staticKeys: ['enableCollapsible'],
 })
 export class ListItemExtension extends NodeExtension<ListItemOptions> {
   get name() {
@@ -35,7 +39,6 @@ export class ListItemExtension extends NodeExtension<ListItemOptions> {
   }
 
   createNodeSpec(extra: ApplySchemaAttributes, override: NodeSpecOverride): NodeExtensionSpec {
-    const { enableToggle } = this.options;
     return {
       content: 'paragraph block*',
       defining: true,
@@ -43,67 +46,102 @@ export class ListItemExtension extends NodeExtension<ListItemOptions> {
       ...override,
       attrs: {
         ...extra.defaults(),
-        closed: { default: null },
+        closed: { default: false },
         nested: { default: false },
       },
-      parseDOM: [{ tag: 'li', getAttrs: extra.parse }, ...(override.parseDOM ?? [])],
+      parseDOM: [
+        {
+          tag: 'li',
+          getAttrs: extra.parse,
+          priority: ExtensionPriority.Lowest, // Make sure this rule has lower priority then `TaskListItemExtension`'s
+        },
+        ...(override.parseDOM ?? []),
+      ],
       toDOM: (node) => {
-        const canToggle =
-          enableToggle &&
-          findChildren({ node, predicate: (child) => isList(child.node) }).length > 0;
-
-        const toggleDom = canToggle ? [['button', { class: 'toggler' }]] : [];
-
-        const { closed } = omitExtraAttributes(node.attrs, extra) as ListItemAttributes;
         const attrs = extra.dom(node);
-        attrs.class = cx(attrs.class, closed && 'closed', canToggle && 'can-toggle');
-
-        return ['li', extra.dom(node), ...toggleDom, ['span', 0]] as any;
+        return ['li', attrs, 0];
       },
     };
   }
 
-  createEventHandlers(): CreateEventHandlers {
-    return {
-      click: (event, clickState) => {
-        const nodeWithPos = clickState.getNode(this.type);
+  createNodeViews(): NodeViewMethod | Record<string, never> {
+    if (!this.options.enableCollapsible) {
+      return {};
+    }
 
-        if (!nodeWithPos || !event) {
-          return false;
-        }
+    return (node, view, getPos) => {
+      const mark: HTMLElement = document.createElement('div');
+      mark.classList.add(ExtensionListTheme.COLLAPSIBLE_LIST_ITEM_BUTTON);
+      mark.contentEditable = 'false';
 
-        const { pos, node } = nodeWithPos;
-
-        if (event.target instanceof HTMLButtonElement) {
-          this.store.commands.updateNodeAttributes(pos, {
-            ...node.attrs,
-            closed: !node.attrs.closed,
-          });
-
+      if (node.childCount <= 1) {
+        mark.classList.add('disabled');
+      } else {
+        mark.addEventListener('click', () => {
+          const pos = (getPos as () => number)();
+          const selection = NodeSelection.create(view.state.doc, pos);
+          view.dispatch(view.state.tr.setSelection(selection));
+          this.store.commands.toggleListItemClosed();
           return true;
-        }
+        });
+      }
 
-        return false;
-      },
+      return createCustomMarkListItemNodeView({
+        mark,
+        extraClasses: node.attrs.closed
+          ? [ExtensionListTheme.COLLAPSIBLE_LIST_ITEM_CLOSED]
+          : undefined,
+      });
     };
   }
 
   createKeymap(): KeyBindings {
     return {
-      Enter: convertCommand(splitListItem(this.type)),
-      Tab: convertCommand(sinkListItem(this.type)),
-      'Shift-Tab': convertCommand(liftListItem(this.type)),
+      Enter: splitListItem(this.type),
     };
+  }
+
+  createExtensions() {
+    return [new ListItemSharedExtension()];
+  }
+
+  /**
+   * Toggles the current list item.
+   *
+   * @param closed - the `closed` attribute. If it's a boolean value, then it
+   * will be set as an attribute. If it's undefined, then the `closed` attribuate
+   * will be toggled.
+   */
+  @command()
+  toggleListItemClosed(closed?: boolean | undefined): CommandFunction {
+    return ({ state: { tr, selection }, dispatch }) => {
+      // Make sure the list item is selected. Otherwise do nothing.
+      if (!isNodeSelection(selection) || selection.node.type.name !== this.name) {
+        return false;
+      }
+
+      const { node, from } = selection;
+      closed = isBoolean(closed) ? closed : !node.attrs.closed;
+      dispatch?.(tr.setNodeMarkup(from, undefined, { ...node.attrs, closed }));
+
+      return true;
+    };
+  }
+
+  /**
+   * Lift the content inside a list item around the selection out of list
+   */
+  @command()
+  liftListItemOutOfList(): CommandFunction {
+    return liftListItemOutOfList(this.type);
   }
 }
 
 export interface ListItemOptions {
   /**
    * Set this to true to support toggling.
-   *
-   * Since the list item is used for both bullet lists
    */
-  enableToggle?: Static<boolean>;
+  enableCollapsible?: Static<boolean>;
 }
 
 export type ListItemAttributes = ProsemirrorAttributes<{
@@ -111,6 +149,10 @@ export type ListItemAttributes = ProsemirrorAttributes<{
    * @default false
    */
   closed: boolean;
+  /**
+   * @default false
+   */
+  nested: boolean;
 }>;
 
 declare global {

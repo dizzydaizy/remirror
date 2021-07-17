@@ -48,6 +48,9 @@
       "path": "packages/prosemirror-paste-rules/src"
     },
     {
+      "path": "packages/prosemirror-resizable-view/src"
+    },
+    {
       "path": "packages/prosemirror-suggest/__tests__"
     },
     {
@@ -136,6 +139,9 @@
     },
     {
       "path": "packages/remirror__extension-bold/src"
+    },
+    {
+      "path": "packages/remirror__extension-callout/__stories__"
     },
     {
       "path": "packages/remirror__extension-callout/__tests__"
@@ -261,6 +267,9 @@
       "path": "packages/remirror__extension-horizontal-rule/src"
     },
     {
+      "path": "packages/remirror__extension-image/__stories__"
+    },
+    {
       "path": "packages/remirror__extension-image/__tests__"
     },
     {
@@ -283,6 +292,9 @@
     },
     {
       "path": "packages/remirror__extension-link/src"
+    },
+    {
+      "path": "packages/remirror__extension-list/__stories__"
     },
     {
       "path": "packages/remirror__extension-list/__tests__"
@@ -552,6 +564,9 @@
       "path": "packages/remirror__react-utils/src"
     },
     {
+      "path": "packages/remirror__react/__stories__"
+    },
+    {
       "path": "packages/remirror__react/src"
     },
     {
@@ -574,6 +589,9 @@
     },
     {
       "path": "packages/remirror/src"
+    },
+    {
+      "path": "packages/storybook-react/__stories__"
     },
     {
       "path": "packages/storybook-react/src"

@@ -13,6 +13,7 @@ import {
   getMatchString,
   getSelectedWord,
   Handler,
+  includes,
   isAllSelection,
   isElementDomNode,
   isMarkActive,
@@ -116,7 +117,7 @@ export interface LinkOptions {
    * value.
    *
    * @default
-   * /((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[\da-z]+([.-][\da-z]+)*\.[a-z]{2,5}(:\d{1,5})?(\/.*)?)/gi
+   * /(?:https?:\/\/)?[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,8}(?::\d{1,5})?(?:\/\S*)?/gi
    */
   autoLinkRegex?: Static<RegExp>;
 
@@ -133,6 +134,14 @@ export interface LinkOptions {
    * @default null
    */
   defaultTarget?: LinkTarget;
+
+  /**
+   * The supported targets which can be parsed from the DOM or added with
+   * `insertLink`.
+   *
+   * @default []
+   */
+  supportedTargets?: LinkTarget[];
 }
 
 export interface LinkClickData extends GetMarkRange, LinkAttributes {}
@@ -163,8 +172,9 @@ export type LinkAttributes = ProsemirrorAttributes<{
     defaultProtocol: '',
     selectTextOnClick: false,
     openLinkOnClick: false,
-    autoLinkRegex: /(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[\da-z]+([.-][\da-z]+)*\.[a-z]{2,8}(:\d{1,5})?(\/\S*)?/,
+    autoLinkRegex: /(?:https?:\/\/)?[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,8}(?::\d{1,5})?(?:\/\S*)?/gi,
     defaultTarget: null,
+    supportedTargets: [],
   },
   staticKeys: ['autoLinkRegex'],
   handlerKeyOptions: { onClick: { earlyReturnValue: true } },
@@ -182,6 +192,12 @@ export class LinkExtension extends MarkExtension<LinkOptions> {
 
   createMarkSpec(extra: ApplySchemaAttributes, override: MarkSpecOverride): MarkExtensionSpec {
     const AUTO_ATTRIBUTE = 'data-link-auto';
+
+    const getTargetObject = (target: string | null | undefined): { target: string } | undefined => {
+      const { defaultTarget, supportedTargets } = this.options;
+      const targets = defaultTarget ? [...supportedTargets, defaultTarget] : supportedTargets;
+      return target && includes(targets, target) ? { target } : undefined;
+    };
 
     return {
       inclusive: false,
@@ -205,16 +221,27 @@ export class LinkExtension extends MarkExtension<LinkOptions> {
             const auto =
               node.hasAttribute(AUTO_ATTRIBUTE) ||
               this.options.autoLinkRegex.test(node.textContent ?? '');
-            return { ...extra.parse(node), href, auto };
+            return {
+              ...extra.parse(node),
+              href,
+              auto,
+              ...getTargetObject(node.getAttribute('target')),
+            };
           },
         },
         ...(override.parseDOM ?? []),
       ],
       toDOM: (node) => {
-        const { auto: _, ...rest } = omitExtraAttributes(node.attrs, extra);
+        const { auto: _, target: __, ...rest } = omitExtraAttributes(node.attrs, extra);
         const auto = node.attrs.auto ? { [AUTO_ATTRIBUTE]: '' } : {};
         const rel = 'noopener noreferrer nofollow';
-        const attrs = { ...extra.dom(node), ...rest, rel, ...auto };
+        const attrs = {
+          ...extra.dom(node),
+          ...rest,
+          rel,
+          ...auto,
+          ...getTargetObject(node.attrs.target),
+        };
 
         return ['a', attrs, 0];
       },
@@ -332,7 +359,7 @@ export class LinkExtension extends MarkExtension<LinkOptions> {
     return [
       {
         type: 'mark',
-        regexp: /https?:\/\/(www\.)?[\w#%+.:=@~-]{2,256}\.[a-z]{2,8}\b([\w#%&+./:=?@~-]*)/gi,
+        regexp: this.options.autoLinkRegex,
         markType: this.type,
         getAttributes: (url, isReplacement) => ({
           href: getMatchString(url),

@@ -143,7 +143,7 @@ export type MinArray<Type, Length extends number> = Length extends Length
 type _MinArray<
   Type,
   Length extends number,
-  Accumulated extends unknown[]
+  Accumulated extends unknown[],
 > = Accumulated['length'] extends Length
   ? [...Accumulated, ...Type[]]
   : _MinArray<Type, Length, [Type, ...Accumulated]>;
@@ -218,7 +218,7 @@ export type IndexUnionFromTuple<Tuple extends readonly unknown[]> = Tuple extend
   : never;
 type _IndexUnionFromTuple<
   Tuple extends readonly unknown[],
-  Length extends number
+  Length extends number,
 > = Tuple['length'] extends Length
   ? Tuple[number]
   : _IndexUnionFromTuple<[...Tuple, Tuple['length']], Length>;
@@ -389,7 +389,7 @@ type NeverBrand = Brand<object, never>;
 export type IfNoRequiredProperties<
   Type extends object,
   Then,
-  Else
+  Else,
 > = GetRequiredKeys<Type> extends NeverBrand ? Then : Else;
 
 /**

@@ -141,8 +141,11 @@ export class ReactFramework<Extension extends AnyExtension> extends Framework<
     // invariant(!this.rootPropsConfig.called, { code: ErrorConstant.REACT_GET_ROOT_PROPS });
     this.rootPropsConfig.called = true;
 
-    const { refKey: refKey = 'ref', ref, ...config } =
-      options ?? object<GetRootPropsConfig<RefKey>>();
+    const {
+      refKey: refKey = 'ref',
+      ref,
+      ...config
+    } = options ?? object<GetRootPropsConfig<RefKey>>();
 
     return {
       [refKey]: composeRefs(ref as Ref<HTMLElement>, this.onRef),
@@ -286,12 +289,12 @@ export class ReactFramework<Extension extends AnyExtension> extends Framework<
   /**
    * Called for every update of the props and state.
    */
-  onUpdate(previousEditable: boolean | undefined): void {
+  onUpdate(): void {
     // Ensure that `children` is still a render prop
     // propIsFunction(this.props.children);
 
     // Check whether the editable prop has been updated
-    if (this.props.editable !== previousEditable && this.view && this.#editorRef) {
+    if (this.view && this.#editorRef) {
       this.view.setProps({ ...this.view.props, editable: () => this.props.editable ?? true });
     }
   }
