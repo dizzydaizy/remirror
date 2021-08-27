@@ -32,12 +32,10 @@ const files = globby.sync(['packages/remirror__theme/src/*.{ts,tsx}'], {
   ignore: [
     '**/@remirror/styles',
     '**/website',
-    '**/playground',
     '**/__tests__',
     '**/__dts__',
     '**/__mocks__',
     '**/__fixtures__',
-    '**/__stories__',
     '*.{test,spec}.{ts,tsx}',
     '**/*.d.ts',
     '*.d.ts',

@@ -1,5 +1,35 @@
 # jest-prosemirror
 
+## 1.0.4
+
+> 2021-08-18
+
+### Patch Changes
+
+- Update dependency `prosemirror-gapcursor` to `^1.1.5`.
+
+- Updated dependencies []:
+  - @remirror/pm@1.0.2
+
+## 1.0.3
+
+> 2021-07-26
+
+### Patch Changes
+
+- [#1029](https://github.com/remirror/remirror/pull/1029) [`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2) Thanks [@ocavue](https://github.com/ocavue)! - Update remirror dependencies.
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Upgrade dependencies.
+
+- Updated dependencies [[`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b)]:
+  - @remirror/core-utils@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

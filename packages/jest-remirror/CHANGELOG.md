@@ -1,5 +1,53 @@
 # jest-remirror
 
+## 1.0.5
+
+> 2021-08-26
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - @remirror/dom@1.0.3
+  - @remirror/preset-core@1.0.3
+
+## 1.0.4
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+  - @remirror/dom@1.0.2
+  - @remirror/preset-core@1.0.2
+
+## 1.0.3
+
+> 2021-08-18
+
+### Patch Changes
+
+- Update dependency `prosemirror-gapcursor` to `^1.1.5`.
+
+- Updated dependencies []:
+  - @remirror/pm@1.0.2
+  - jest-prosemirror@1.0.4
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Upgrade dependencies.
+
+- Updated dependencies [[`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b)]:
+  - jest-prosemirror@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

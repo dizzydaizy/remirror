@@ -1,5 +1,26 @@
 # prosemirror-resizable-view
 
+## 1.0.0
+
+> 2021-07-24
+
+### Major Changes
+
+- [#1023](https://github.com/remirror/remirror/pull/1023) [`0423ce7a8`](https://github.com/remirror/remirror/commit/0423ce7a8d63aaeb2baa4bfd4e7a54647730cab5) Thanks [@ocavue](https://github.com/ocavue)! - Make `ResizableNodeView` as an abstract class.
+
+### Patch Changes
+
+- Updated dependencies [[`0423ce7a8`](https://github.com/remirror/remirror/commit/0423ce7a8d63aaeb2baa4bfd4e7a54647730cab5)]:
+  - @remirror/core-utils@1.1.0
+
+## 0.1.1
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Upgrade dependencies.
+
 ## 0.1.0
 
 > 2021-07-17

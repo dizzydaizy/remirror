@@ -1,5 +1,41 @@
 # @remirror/extension-list
 
+## 1.0.5
+
+> 2021-08-25
+
+### Patch Changes
+
+- Fixes a bug that causes the editor to insert an empty task list when deleting all content in the editor. Closes #1163.
+
+## 1.0.4
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+  - @remirror/extension-events@1.0.2
+
+## 1.0.3
+
+> 2021-08-08
+
+### Patch Changes
+
+- [#1042](https://github.com/remirror/remirror/pull/1042) [`79a5cb55b`](https://github.com/remirror/remirror/commit/79a5cb55b2e9c3db10b137d1e2235df724291d52) Thanks [@ocavue](https://github.com/ocavue)! - When splitting a closed item, keep its content in the origin list item.
+
+## 1.0.2
+
+> 2021-07-25
+
+### Patch Changes
+
+- [#1018](https://github.com/remirror/remirror/pull/1018) [`259a35f3c`](https://github.com/remirror/remirror/commit/259a35f3cd56cd685d9f659002c211c80edebd91) Thanks [@ocavue](https://github.com/ocavue)! - Fix CJK IME in a task list or a collapsible list
+
 ## 1.0.1
 
 > 2021-07-17

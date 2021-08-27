@@ -1,6 +1,6 @@
 {
   "name": "@remirror/i18n",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Supported internationalization and locales for the remirror editor.",
   "keywords": [
     "remirror",
@@ -12,7 +12,7 @@
   "contributors": [
     "Ifiok Jr. <ifiokotung@gmail.com>"
   ],
-  "sideEffects": false,
+  "sideEffects": true,
   "exports": {
     ".": {
       "import": "./dist/remirror-i18n.esm.js",

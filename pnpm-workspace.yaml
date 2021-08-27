@@ -1,7 +1,4 @@
 packages:
-  - 'apps/*'
-  - 'deprecated/*'
-  - 'examples/*'
   - 'packages/*'
   - 'support'
   - 'support/actions'

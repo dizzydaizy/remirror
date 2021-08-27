@@ -1,5 +1,40 @@
 # @remirror/extension-node-formatting
 
+## 1.0.5
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+
+## 1.0.4
+
+> 2021-08-20
+
+### Patch Changes
+
+- Fix eager parsing of style attribute, and limit valid `line-height` values in `NodeFormattingExtension`
+
+## 1.0.3
+
+> 2021-08-18
+
+### Patch Changes
+
+- Publish a version of `@remirror/extension-node-formatting` without code modification.
+
+## 1.0.2
+
+> 2021-08-18
+
+### Patch Changes
+
+- [#1072](https://github.com/remirror/remirror/pull/1072) [`e5278d75e`](https://github.com/remirror/remirror/commit/e5278d75e931a91864adfd634d223a29ccb25eda) Thanks [@ronnyroeller](https://github.com/ronnyroeller)! - Node formatting wasn't reflected in style attribute
+
 ## 1.0.1
 
 > 2021-07-17

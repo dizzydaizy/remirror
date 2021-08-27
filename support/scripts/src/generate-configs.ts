@@ -104,6 +104,12 @@ async function generateExports() {
       augmentExportsObject(packageJson, relativePath, subPackageJson);
     }
 
+    // `styles` contains CSS files without a package.json. Webpack 5 needs this
+    // to import CSS files. See also https://github.com/remirror/remirror/pull/1123
+    if (pkg.name === 'remirror') {
+      exportsObject['./styles/*'] = './styles/*';
+    }
+
     // Make sure the keys are sorted for the exports.
     packageJson.exports = sortKeys(exportsObject) ?? '';
 
@@ -351,7 +357,6 @@ const DEFAULT_TSCONFIG_META: Required<TsConfigMeta> = {
       declaration: false,
       noEmit: true,
       skipLibCheck: true,
-      // @ts-ignore
       importsNotUsedAsValues: 'remove',
     },
     include: ['./'],
@@ -369,7 +374,6 @@ const DEFAULT_TSCONFIG_META: Required<TsConfigMeta> = {
       declaration: false,
       noEmit: true,
       skipLibCheck: true,
-      // @ts-ignore
       importsNotUsedAsValues: 'remove',
     },
     include: ['./'],
@@ -384,30 +388,9 @@ const DEFAULT_TSCONFIG_META: Required<TsConfigMeta> = {
       noUnusedParameters: false,
       allowUnreachableCode: true,
       noImplicitReturns: false,
-      // @ts-ignore
       importsNotUsedAsValues: 'remove',
     },
     include: ['./'],
-  },
-  __stories__: {
-    compilerOptions: {
-      declaration: false,
-      noEmit: true,
-      skipLibCheck: true,
-      // @ts-ignore
-      importsNotUsedAsValues: 'remove',
-    },
-    include: ['./'],
-    paths: [
-      ['react', '@types/react'],
-      ['react/jsx-dev-runtime', '@types/react', 'jsx-dev-runtime.d.ts'],
-      ['react/jsx-runtime', '@types/react', 'jsx-runtime.d.ts'],
-      ['react-dom', '@types/react-dom'],
-      ['reakit', 'reakit', 'ts'],
-      '@remirror/react',
-      ['@storybook/react', '@storybook/react', 'types-6-0.d.ts'],
-      '@remirror/dev',
-    ],
   },
 };
 
@@ -638,8 +621,6 @@ async function resolveTsConfigMeta(
 
 /**
  * Generate a tsconfig for every package.
- *
- * This is currently unused.
  */
 async function generatePackageTsConfigs() {
   log.info(chalk`\n{blue Generating {bold.grey tsconfig.json} files for all packages}`);
@@ -750,7 +731,7 @@ async function main() {
 // Run the script and listen for any errors.
 main().catch((error) => {
   log.error(
-    chalk`\n{red Something went wrong while running the} {blue.bold playground:imports} {red script.}`,
+    chalk`\n{red Something went wrong while running the} {blue.bold generate-configs} {red script.}`,
   );
 
   log.fatal('\n', error);

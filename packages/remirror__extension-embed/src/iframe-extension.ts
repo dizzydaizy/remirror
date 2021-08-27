@@ -4,6 +4,7 @@ import {
   command,
   CommandFunction,
   cx,
+  EditorView,
   extension,
   ExtensionTag,
   findSelectedNodeOfType,
@@ -11,26 +12,16 @@ import {
   NodeExtension,
   NodeExtensionSpec,
   NodeSpecOverride,
+  NodeViewMethod,
   object,
   omitExtraAttributes,
   ProsemirrorAttributes,
+  ProsemirrorNode,
   Shape,
-  Static,
 } from '@remirror/core';
 
-export interface IframeOptions {
-  /**
-   * The default source to use for the iframe.
-   */
-  defaultSource?: Static<string>;
-
-  /**
-   * The class to add to the iframe.
-   *
-   * @default 'remirror-iframe'
-   */
-  class?: Static<string>;
-}
+import { IframeOptions } from './iframe-types';
+import { ResizableIframeView } from './resizable-iframe-view';
 
 export type IframeAttributes = ProsemirrorAttributes<{
   src: string;
@@ -48,6 +39,7 @@ export type IframeAttributes = ProsemirrorAttributes<{
   defaultOptions: {
     defaultSource: '',
     class: 'remirror-iframe',
+    enableResizing: false,
   },
   staticKeys: ['defaultSource', 'class'],
 })
@@ -58,6 +50,20 @@ export class IframeExtension extends NodeExtension<IframeOptions> {
 
   createTags() {
     return [ExtensionTag.Block];
+  }
+
+  createNodeViews(): NodeViewMethod | Record<string, NodeViewMethod> {
+    const iframeOptions = {
+      ...this.options,
+    };
+
+    if (this.options.enableResizing) {
+      return (node: ProsemirrorNode, view: EditorView, getPos: boolean | (() => number)) => {
+        return new ResizableIframeView(node, view, getPos as () => number, iframeOptions);
+      };
+    }
+
+    return {};
   }
 
   createNodeSpec(extra: ApplySchemaAttributes, override: NodeSpecOverride): NodeExtensionSpec {
@@ -148,14 +154,17 @@ export class IframeExtension extends NodeExtension<IframeOptions> {
   @command()
   updateIframeSource(src: string): CommandFunction {
     return ({ tr, dispatch }) => {
-      const found = findSelectedNodeOfType({ selection: tr.selection, types: this.type });
+      const iframeNode = findSelectedNodeOfType({ selection: tr.selection, types: this.type });
 
-      if (!found) {
+      // Selected node is NOT an iframe node, return false indicating this command is NOT enabled
+      if (!iframeNode) {
         return false;
       }
 
-      dispatch?.(tr.setNodeMarkup(found.pos, undefined, { ...found.node.attrs, src }));
+      // Call dispatch method if present (using optional chaining), to modify the actual document
+      dispatch?.(tr.setNodeMarkup(iframeNode.pos, undefined, { ...iframeNode.node.attrs, src }));
 
+      // Return true, indicating this command IS enabled
       return true;
     };
   }

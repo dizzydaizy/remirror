@@ -7,7 +7,6 @@ import camelCaseKeys from 'camelcase-keys';
 import chalk from 'chalk';
 import { exec as _exec } from 'child_process';
 import fs from 'fs';
-import { lstat } from 'fs/promises';
 import { diff } from 'jest-diff';
 import isEqual from 'lodash.isequal';
 import minimist from 'minimist';
@@ -21,7 +20,7 @@ import { PackageJson, TsConfigJson } from '@remirror/types';
 /**
  * The `camelCased` argument passed to the cli.
  */
-export const cliArgs = camelCaseKeys(minimist(process.argv.slice(2)));
+export const cliArgs: any = camelCaseKeys(minimist(process.argv.slice(2)));
 
 // The log level to use for scripts.
 const minLevel = cliArgs.logLevel ?? process.env.LOG_LEVEL ?? 'debug';
@@ -68,7 +67,7 @@ export function mangleScopedPackageName(packageName: string): string {
  */
 export async function fileExists(filePath: string): Promise<boolean> {
   try {
-    const stat = await lstat(filePath);
+    const stat = fs.lstatSync(filePath);
     return stat.isFile();
   } catch {
     return false;
@@ -204,6 +203,7 @@ let packages: Promise<Package[]>;
 interface GetAllDependencies {
   excludeDeprecated?: boolean;
   excludeSupport?: boolean;
+  excludePrivate?: boolean;
 }
 
 /**
@@ -214,6 +214,7 @@ interface GetAllDependencies {
 export function getAllDependencies({
   excludeDeprecated = true,
   excludeSupport = false,
+  excludePrivate = false,
 }: GetAllDependencies = {}): Promise<Package[]> {
   if (!packages) {
     packages = getPackages(baseDir()).then(({ packages = [] }) => {
@@ -225,6 +226,10 @@ export function getAllDependencies({
         }
 
         if (excludeDeprecated && pkg.dir.startsWith(baseDir('deprecated'))) {
+          continue;
+        }
+
+        if (excludePrivate && pkg.packageJson.private) {
           continue;
         }
 

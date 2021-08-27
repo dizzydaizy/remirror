@@ -44,7 +44,7 @@
     "name": "prosemirror-resizable-view",
     "limit": "5 KB",
     "path": "packages/prosemirror-resizable-view/dist/prosemirror-resizable-view.browser.esm.js",
-    "ignore": ["@remirror/core-helpers"],
+    "ignore": ["@remirror/core-helpers", "@remirror/core-utils"],
     "running": false,
     "gzip": true
   },
@@ -139,14 +139,6 @@
     "limit": "5 KB",
     "path": "packages/remirror__dom/dist/remirror-dom.browser.esm.js",
     "ignore": ["@remirror/pm", "@remirror/core", "@remirror/preset-core"],
-    "running": false,
-    "gzip": true
-  },
-  {
-    "name": "@remirror/es-module-shims",
-    "limit": "50 KB",
-    "path": "packages/remirror__es-module-shims/dist/remirror-es-module-shims.browser.esm.js",
-    "ignore": ["@remirror/core-helpers"],
     "running": false,
     "gzip": true
   },
@@ -301,6 +293,24 @@
     "limit": "5 KB",
     "path": "packages/remirror__extension-events/dist/remirror-extension-events.browser.esm.js",
     "ignore": ["@remirror/pm", "@remirror/core", "@remirror/messages"],
+    "running": false,
+    "gzip": true
+  },
+  {
+    "name": "@remirror/extension-file",
+    "limit": "30 KB",
+    "path": "packages/remirror__extension-file/dist/remirror-extension-file.browser.esm.js",
+    "ignore": [
+      "@remirror/pm",
+      "@types/react",
+      "@types/react-dom",
+      "react",
+      "react-dom",
+      "@remirror/core",
+      "@remirror/react",
+      "@remirror/react-components",
+      "@remirror/theme"
+    ],
     "running": false,
     "gzip": true
   },
@@ -480,22 +490,6 @@
     "name": "@remirror/extension-react-component",
     "limit": "10 KB",
     "path": "packages/remirror__extension-react-component/dist/remirror-extension-react-component.browser.esm.js",
-    "ignore": [
-      "@remirror/pm",
-      "@types/react",
-      "@types/react-dom",
-      "react",
-      "react-dom",
-      "@remirror/core",
-      "@remirror/messages"
-    ],
-    "running": false,
-    "gzip": true
-  },
-  {
-    "name": "@remirror/extension-react-native-bridge",
-    "limit": "5 KB",
-    "path": "packages/remirror__extension-react-native-bridge/dist/remirror-extension-react-native-bridge.browser.esm.js",
     "ignore": [
       "@remirror/pm",
       "@types/react",

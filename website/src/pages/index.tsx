@@ -102,8 +102,8 @@ const Home = () => {
               <Link className={cx(styles.getStarted)} to={useBaseUrl('docs')}>
                 Documentation
               </Link>
-              <Link className={cx(styles.getStarted)} href='https://github.com/remirror/remirror'>
-                GitHub <ExternalIcon />
+              <Link className={cx(styles.getStarted)} href='https://remirror.vercel.app'>
+                Examples <ExternalIcon />
               </Link>
             </div>
             <BannerPhone />

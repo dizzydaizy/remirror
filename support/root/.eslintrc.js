@@ -334,7 +334,6 @@ let config = {
     {
       files: [
         '*.spec.{ts,tsx}*',
-        '**/__stories__/**',
         '*.stories.{ts,tsx}',
         'support/**',
         'website/**',
@@ -360,12 +359,10 @@ let config = {
         'docs/**',
         'support/**',
         'website/**',
-        '**/__stories__/**',
         '**/__fixtures__/**',
         '**/*.stories.tsx',
         '**/*.stories.ts',
         'packages/remirror__cli/**',
-        'packages/remirror__playground/**',
         'packages/remirror__extension-emoji/src/data/*.ts',
         'packages/remirror__svelte/rollup.config.js',
         'packages/testing/**',
@@ -389,12 +386,7 @@ let config = {
       },
     },
     {
-      files: [
-        'support/**',
-        'packages/testing/**/*.{js,ts}',
-        'packages/remirror__playground/**',
-        'packages/remirror__playground-deprecated/**',
-      ],
+      files: ['support/**', 'packages/testing/**/*.{js,ts}'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-var-requires': 'off',
@@ -412,7 +404,7 @@ let config = {
       },
     },
     {
-      files: ['packages/remirror__playground/**', 'packages/testing/**'],
+      files: ['packages/testing/**'],
       rules: { '@typescript-eslint/no-var-requires': 'off' },
     },
     {
@@ -500,7 +492,6 @@ if (process.env.FULL_ESLINT_CHECK) {
       {
         files: [
           '**/__tests__/**',
-          '**/__stories__/**',
           '**/__fixtures__/**',
           'support/**',
           'website/**',
@@ -539,6 +530,7 @@ if (process.env.FULL_ESLINT_CHECK) {
           '@typescript-eslint/explicit-module-boundary-types': 'off',
           '@typescript-eslint/no-unused-vars-experimental': 'off',
           '@typescript-eslint/no-unused-vars': 'off',
+          'react-hooks/rules-of-hooks': 'off',
         },
       },
     ],

@@ -1,5 +1,32 @@
 # @remirror/extension-react-component
 
+## 1.0.4
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+
+## 1.0.3
+
+> 2021-08-10
+
+### Patch Changes
+
+- [#1031](https://github.com/remirror/remirror/pull/1031) [`fccb1a68c`](https://github.com/remirror/remirror/commit/fccb1a68c15c8f1c56c5c2561e0573b9932e8cbb) Thanks [@ocavue](https://github.com/ocavue)! - Ignore selection mutations for unselectable nodes.
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Add support for `react@18` in peer dependencies.
+
 ## 1.0.1
 
 > 2021-07-17

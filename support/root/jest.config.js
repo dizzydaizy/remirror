@@ -27,9 +27,6 @@ module.exports = {
     '!examples/**',
     '!website/**',
 
-    // This is internal code and doesn't affect the end user experience.
-    '!packages/remirror__playground/**',
-
     // Currently can't be tested with JSDOM
     '!packages/remirror__extension-epic-mode/**',
 
@@ -61,9 +58,6 @@ module.exports = {
     // Still a wip
     '!packages/remirror__react-components/**',
 
-    // Deprecated package
-    '!packages/remirror__react-social/**',
-
     // Still deciding how best to use this project. It should be moved outside
     // of remirror for simplification.
     '!packages/multishift/**',
@@ -72,17 +66,8 @@ module.exports = {
     '!packages/remirror__icons/src/all-icons.ts',
     '!packages/remirror__react-components/src/icons/all.ts',
 
-    // Deprecated package
-    '!packages/remirror__react-wysiwyg/**',
-
-    // Deprecated package
-    '!packages/remirror__showcase/**',
-
     // Still a wip. No tests at the moment due to lack of usage.
     '!packages/remirror__cli/**',
-
-    // Deprecated packages
-    '!deprecated/**',
   ],
   coverageReporters: ['json', 'lcov', 'text-summary', 'clover'],
   collectCoverage: true,

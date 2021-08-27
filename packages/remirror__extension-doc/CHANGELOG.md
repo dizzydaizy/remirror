@@ -1,5 +1,24 @@
 # @remirror/extension-doc
 
+## 1.0.3
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+
+## 1.0.2
+
+> 2021-08-18
+
+### Patch Changes
+
+- [#1069](https://github.com/remirror/remirror/pull/1069) [`937c3332d`](https://github.com/remirror/remirror/commit/937c3332d11ff28f5c218e3ed77a85b4a817b067) Thanks [@whawker](https://github.com/whawker)! - Add ability for doc node's `docAttributes` to have default attribute values
+
 ## 1.0.1
 
 > 2021-07-17

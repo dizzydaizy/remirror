@@ -1,5 +1,207 @@
 # remirror
 
+## 1.0.14
+
+> 2021-08-26
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - @remirror/extension-positioner@1.1.0
+  - @remirror/dom@1.0.3
+  - @remirror/extension-annotation@1.0.3
+  - @remirror/extension-yjs@1.0.3
+  - @remirror/preset-core@1.0.3
+  - @remirror/preset-wysiwyg@1.0.6
+
+## 1.0.13
+
+> 2021-08-25
+
+### Patch Changes
+
+- Fixes a bug that causes the editor to insert an empty task list when deleting all content in the editor. Closes #1163.
+
+- Updated dependencies []:
+  - @remirror/extension-list@1.0.5
+  - @remirror/preset-wysiwyg@1.0.5
+
+## 1.0.12
+
+> 2021-08-22
+
+### Patch Changes
+
+- Exports `remirror/styles`.
+
+## 1.0.11
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+* Exports `remirror/styles`.
+
+* Updated dependencies []:
+  - @remirror/core@1.0.3
+  - @remirror/dom@1.0.2
+  - @remirror/extension-annotation@1.0.2
+  - @remirror/extension-bidi@1.0.2
+  - @remirror/extension-blockquote@1.0.2
+  - @remirror/extension-bold@1.0.2
+  - @remirror/extension-callout@1.0.2
+  - @remirror/extension-code@1.0.2
+  - @remirror/extension-code-block@1.0.3
+  - @remirror/extension-codemirror5@1.0.2
+  - @remirror/extension-collaboration@1.0.2
+  - @remirror/extension-columns@1.0.2
+  - @remirror/extension-diff@1.0.2
+  - @remirror/extension-doc@1.0.3
+  - @remirror/extension-drop-cursor@1.0.2
+  - @remirror/extension-embed@1.1.1
+  - @remirror/extension-emoji@1.0.2
+  - @remirror/extension-epic-mode@1.0.2
+  - @remirror/extension-events@1.0.2
+  - @remirror/extension-font-family@1.0.2
+  - @remirror/extension-font-size@1.0.2
+  - @remirror/extension-gap-cursor@1.0.2
+  - @remirror/extension-hard-break@1.0.2
+  - @remirror/extension-heading@1.0.2
+  - @remirror/extension-history@1.0.2
+  - @remirror/extension-horizontal-rule@1.0.2
+  - @remirror/extension-image@1.0.3
+  - @remirror/extension-italic@1.0.2
+  - @remirror/extension-link@1.0.2
+  - @remirror/extension-list@1.0.4
+  - @remirror/extension-markdown@1.0.2
+  - @remirror/extension-mention@1.0.2
+  - @remirror/extension-mention-atom@1.0.2
+  - @remirror/extension-node-formatting@1.0.5
+  - @remirror/extension-paragraph@1.0.2
+  - @remirror/extension-placeholder@1.0.2
+  - @remirror/extension-positioner@1.0.2
+  - @remirror/extension-search@1.0.2
+  - @remirror/extension-strike@1.0.2
+  - @remirror/extension-sub@1.0.2
+  - @remirror/extension-sup@1.0.2
+  - @remirror/extension-tables@1.0.2
+  - @remirror/extension-text@1.0.2
+  - @remirror/extension-text-case@1.0.2
+  - @remirror/extension-text-color@1.0.2
+  - @remirror/extension-text-highlight@1.0.2
+  - @remirror/extension-trailing-node@1.0.2
+  - @remirror/extension-underline@1.0.2
+  - @remirror/extension-whitespace@1.0.2
+  - @remirror/extension-yjs@1.0.2
+  - @remirror/preset-core@1.0.2
+  - @remirror/preset-formatting@1.0.4
+  - @remirror/preset-wysiwyg@1.0.4
+
+## 1.0.10
+
+> 2021-08-20
+
+### Patch Changes
+
+- Fix eager parsing of style attribute, and limit valid `line-height` values in `NodeFormattingExtension`
+
+- Updated dependencies []:
+  - @remirror/extension-node-formatting@1.0.4
+  - @remirror/preset-formatting@1.0.3
+
+## 1.0.9
+
+> 2021-08-18
+
+### Patch Changes
+
+- Remove the playground API from `remirror`.
+
+- Updated dependencies []:
+  - @remirror/pm@1.0.2
+
+## 1.0.8
+
+> 2021-08-18
+
+### Patch Changes
+
+- Publish a version of `@remirror/extension-node-formatting` without code modification.
+
+- Updated dependencies []:
+  - @remirror/extension-node-formatting@1.0.3
+  - @remirror/preset-formatting@1.0.2
+
+## 1.0.7
+
+> 2021-08-18
+
+### Patch Changes
+
+- [#1069](https://github.com/remirror/remirror/pull/1069) [`937c3332d`](https://github.com/remirror/remirror/commit/937c3332d11ff28f5c218e3ed77a85b4a817b067) Thanks [@whawker](https://github.com/whawker)! - Add ability for doc node's `docAttributes` to have default attribute values
+
+- Updated dependencies [[`937c3332d`](https://github.com/remirror/remirror/commit/937c3332d11ff28f5c218e3ed77a85b4a817b067)]:
+  - @remirror/extension-doc@1.0.2
+
+## 1.0.6
+
+> 2021-08-13
+
+### Patch Changes
+
+- [#1057](https://github.com/remirror/remirror/pull/1057) [`662edfdaa`](https://github.com/remirror/remirror/commit/662edfdaa6ab7954edd4946b6f06da6d36288042) Thanks [@ocavue](https://github.com/ocavue)! - Update dependency `@remirror/extension-code-block`.
+
+- Updated dependencies [[`662edfdaa`](https://github.com/remirror/remirror/commit/662edfdaa6ab7954edd4946b6f06da6d36288042), [`b288d665f`](https://github.com/remirror/remirror/commit/b288d665fe1f3b8f0a9a635ca3f29e49e22ac4b3)]:
+  - @remirror/preset-wysiwyg@1.0.3
+  - @remirror/extension-code-block@1.0.2
+
+## 1.0.5
+
+> 2021-08-08
+
+### Patch Changes
+
+- [#1046](https://github.com/remirror/remirror/pull/1046) [`1d83e4fde`](https://github.com/remirror/remirror/commit/1d83e4fde5a92b68b68d4b1a8e2260b4a985b3cd) Thanks [@ocavue](https://github.com/ocavue)! - Update dependency `@remirror/extension-list`.
+
+- Updated dependencies [[`79a5cb55b`](https://github.com/remirror/remirror/commit/79a5cb55b2e9c3db10b137d1e2235df724291d52)]:
+  - @remirror/extension-list@1.0.3
+
+## 1.0.4
+
+> 2021-08-04
+
+### Patch Changes
+
+- [#1033](https://github.com/remirror/remirror/pull/1033) [`ec998d82b`](https://github.com/remirror/remirror/commit/ec998d82b5f2926b4d1eb36eb62d0557aab8fe4b) Thanks [@devmrin](https://github.com/devmrin)! - Fix i18n bold command label.
+
+## 1.0.3
+
+> 2021-07-26
+
+### Patch Changes
+
+- [#1029](https://github.com/remirror/remirror/pull/1029) [`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2) Thanks [@ocavue](https://github.com/ocavue)! - Update remirror dependencies.
+
+- Updated dependencies [[`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2)]:
+  - @remirror/core@1.0.2
+  - @remirror/preset-wysiwyg@1.0.2
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Upgrade dependencies.
+
+- Updated dependencies [[`22115ea9e`](https://github.com/remirror/remirror/commit/22115ea9ed1977d20b7019d065d6a31d39b359eb), [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b)]:
+  - @remirror/icons@1.0.2
+  - @remirror/core-utils@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

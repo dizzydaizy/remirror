@@ -1,6 +1,6 @@
 {
   "name": "@remirror/extension-callout",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Add callouts to your text editor.",
   "keywords": [
     "remirror",
@@ -36,13 +36,13 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.13.10",
-    "@remirror/core": "^1.0.1",
-    "@remirror/messages": "^1.0.1",
-    "@remirror/theme": "^1.0.1"
+    "@remirror/core": "^1.0.3",
+    "@remirror/messages": "^1.0.2",
+    "@remirror/theme": "^1.1.0"
   },
   "devDependencies": {
     "@joeattardi/emoji-button": "^4.6.0",
-    "@remirror/pm": "^1.0.1",
+    "@remirror/pm": "^1.0.2",
     "@svgmoji/blob": "^3.1.0",
     "svgmoji": "^3.2.0"
   },

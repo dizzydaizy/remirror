@@ -17,12 +17,13 @@ jobs:
   version:
     timeout-minutes: 8
     runs-on: ubuntu-latest
-    if: false == contains(github.ref, 'changeset') && github.repository == 'remirror/remirror'
+    if: ${{ false == contains(github.ref, 'changeset') && github.repository == 'remirror/remirror' }}
     steps:
       - name: checkout code repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          token: ${{ secrets.REMIRROR_BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: setup caching
         uses: actions/cache@v2
@@ -54,4 +55,4 @@ jobs:
           commit: 'chore(changeset): version update'
           title: 'chore(changeset): version update'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REMIRROR_BOT_GITHUB_TOKEN }}

@@ -9,8 +9,6 @@ Fork [this repository][repo], clone your fork and add this repository as the ups
 
 You will need to have [`pnpm`](https://pnpm.js.org) installed so make sure you follow the installation [instructions](https://pnpm.js.org/en/installation). At the time of writing the advised way to install is via `npm i -g pnpm`.
 
-You will also need to install [`git-lfs`](https://git-lfs.github.com/) which is used for managing large file storage. The installation is platform dependent so please follow the instructions outlined [here](https://git-lfs.github.com/).
-
 ```bash
 git clone <<FORKED_REPO_URL>>
 cd remirror
@@ -141,7 +139,7 @@ Stories are an integral part of this repository. They serve as the package level
 
 For example the **bold extension** will have a story which shows how the commands can be used to toggle bold text within the editor.
 
-Each story should be placed within the `__stories__` folder and the file should end with the pattern `*.stories.ts(x)`.
+Each story should be placed within the `stories` folder and the file should end with the pattern `*.stories.ts(x)`.
 
 Following the 1.0.0 release of `remirror` there will be a big push to add more stories documenting the usage of all the extensions, commands and hooks available.
 
@@ -176,17 +174,15 @@ If you're modifying a package and import helpers from another packages in the mo
 
 ### General
 
-This project uses [`preconstruct`](https://github.com/preconstruct/preconstruct) to manage builds. Each time the project is installed `preconstruct dev` is run which automatically sets the dist folder with entry points mapping to the source files of the package. This is really useful for development and except for one exception when working on the playground is all you need.
+This project uses [`preconstruct`](https://github.com/preconstruct/preconstruct) to manage builds. Each time the project is installed `preconstruct dev` is run which automatically sets the dist folder with entry points mapping to the source files of the package. This is really useful for development and except for one exception when working on the Storybook is all you need.
 
-### Playground
-
-Working on the playground requires the docs to be started.
+### Storybook
 
 ```bash
-pnpm run docs
+pnpm run storybook
 ```
 
-When run this builds all packages and then watch for changes to rebuild as necessary.
+When run this builds all packages and then watch for changes to reload as necessary.
 
 <br />
 

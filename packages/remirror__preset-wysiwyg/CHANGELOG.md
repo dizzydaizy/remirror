@@ -1,5 +1,81 @@
 # @remirror/preset-wysiwyg
 
+## 1.0.6
+
+> 2021-08-26
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - @remirror/preset-core@1.0.3
+
+## 1.0.5
+
+> 2021-08-25
+
+### Patch Changes
+
+- Fixes a bug that causes the editor to insert an empty task list when deleting all content in the editor. Closes #1163.
+
+- Updated dependencies []:
+  - @remirror/extension-list@1.0.5
+
+## 1.0.4
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+  - @remirror/extension-bidi@1.0.2
+  - @remirror/extension-blockquote@1.0.2
+  - @remirror/extension-bold@1.0.2
+  - @remirror/extension-code@1.0.2
+  - @remirror/extension-code-block@1.0.3
+  - @remirror/extension-drop-cursor@1.0.2
+  - @remirror/extension-embed@1.1.1
+  - @remirror/extension-gap-cursor@1.0.2
+  - @remirror/extension-hard-break@1.0.2
+  - @remirror/extension-heading@1.0.2
+  - @remirror/extension-horizontal-rule@1.0.2
+  - @remirror/extension-image@1.0.3
+  - @remirror/extension-italic@1.0.2
+  - @remirror/extension-link@1.0.2
+  - @remirror/extension-list@1.0.4
+  - @remirror/extension-search@1.0.2
+  - @remirror/extension-strike@1.0.2
+  - @remirror/extension-tables@1.0.2
+  - @remirror/extension-trailing-node@1.0.2
+  - @remirror/extension-underline@1.0.2
+  - @remirror/preset-core@1.0.2
+
+## 1.0.3
+
+> 2021-08-13
+
+### Patch Changes
+
+- [#1057](https://github.com/remirror/remirror/pull/1057) [`662edfdaa`](https://github.com/remirror/remirror/commit/662edfdaa6ab7954edd4946b6f06da6d36288042) Thanks [@ocavue](https://github.com/ocavue)! - Update dependency `@remirror/extension-code-block`.
+
+- Updated dependencies [[`b288d665f`](https://github.com/remirror/remirror/commit/b288d665fe1f3b8f0a9a635ca3f29e49e22ac4b3)]:
+  - @remirror/extension-code-block@1.0.2
+
+## 1.0.2
+
+> 2021-07-26
+
+### Patch Changes
+
+- [#1029](https://github.com/remirror/remirror/pull/1029) [`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2) Thanks [@ocavue](https://github.com/ocavue)! - Update remirror dependencies.
+
+- Updated dependencies [[`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2)]:
+  - @remirror/core@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

@@ -24,6 +24,7 @@
   'extension.command.increase-font-size.description': 'Increase the font size',
   'extension.command.increase-font-size.label': 'Increase',
   'extension.command.increase-indent.label': 'Increase indentation',
+  'extension.command.insert-emoji.label': 'Insert Emoji',
   'extension.command.insert-paragraph.description': 'Insert a new paragraph',
   'extension.command.insert-paragraph.label': 'Insert Paragraph',
   'extension.command.justify-align.label': 'Justify',
@@ -62,7 +63,7 @@
     'Add blockquote formatting to the selected text',
   'extension.command.toggle-blockquote.label': 'Blockquote',
   'extension.command.toggle-bold.description': 'Add bold formatting to the selected text',
-  'extension.command.toggle-bold.label': 'Insert Emoji',
+  'extension.command.toggle-bold.label': 'Bold',
   'extension.command.toggle-bullet-list.description': 'Bulleted list',
   'extension.command.toggle-callout.description': [
     [
@@ -140,6 +141,7 @@
   'extension.command.toggle-strike.label': 'Strikethrough',
   'extension.command.toggle-subscript.label': 'Subscript',
   'extension.command.toggle-superscript.label': 'Superscript',
+  'extension.command.toggle-task-list.description': 'Tasked list',
   'extension.command.toggle-underline.description': 'Underline the selected text',
   'extension.command.toggle-underline.label': 'Underline',
   'extension.command.toggle-upper-case.label': [

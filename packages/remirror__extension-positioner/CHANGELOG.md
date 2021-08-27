@@ -1,5 +1,25 @@
 # @remirror/extension-positioner
 
+## 1.1.0
+
+> 2021-08-26
+
+### Minor Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+## 1.0.2
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/core@1.0.3
+  - @remirror/extension-events@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

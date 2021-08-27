@@ -1,5 +1,52 @@
 # @remirror/react-core
 
+## 1.0.4
+
+> 2021-08-26
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - @remirror/extension-positioner@1.1.0
+  - @remirror/preset-core@1.0.3
+
+## 1.0.3
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/i18n@1.0.3
+  - @remirror/core@1.0.3
+  - @remirror/extension-positioner@1.0.2
+  - @remirror/extension-react-component@1.0.4
+  - @remirror/extension-react-ssr@1.0.3
+  - @remirror/preset-core@1.0.2
+  - @remirror/preset-react@1.0.2
+  - @remirror/react-renderer@1.0.4
+  - @remirror/react-ssr@1.0.3
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Add support for `react@18` in peer dependencies.
+
+- Updated dependencies [[`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b)]:
+  - create-context-state@1.0.1
+  - @remirror/extension-react-component@1.0.2
+  - @remirror/extension-react-ssr@1.0.2
+  - @remirror/react-renderer@1.0.2
+  - @remirror/react-ssr@1.0.2
+  - @remirror/react-utils@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

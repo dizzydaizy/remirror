@@ -1,5 +1,50 @@
 # @remirror/dev
 
+## 1.0.5
+
+> 2021-08-26
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - @remirror/react@1.0.5
+
+## 1.0.4
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+- Updated dependencies []:
+  - @remirror/react@1.0.4
+
+## 1.0.3
+
+> 2021-08-18
+
+### Patch Changes
+
+- Remove the playground API from `@remirror/react`.
+
+- Updated dependencies []:
+  - @remirror/pm@1.0.2
+  - @remirror/react@1.0.3
+
+## 1.0.2
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Add support for `react@18` in peer dependencies.
+
+- Updated dependencies [[`22115ea9e`](https://github.com/remirror/remirror/commit/22115ea9ed1977d20b7019d065d6a31d39b359eb)]:
+  - @remirror/react@1.0.2
+
 ## 1.0.1
 
 > 2021-07-17

@@ -1,6 +1,6 @@
 {
   "name": "@remirror/react",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "Hooks and components for consuming `remirror` with your fave framework `React`.",
   "homepage": "https://github.com/remirror/remirror/tree/HEAD/packages/remirror__react",
   "repository": "https://github.com/remirror/remirror/tree/HEAD/packages/remirror__react",
@@ -18,12 +18,6 @@
       "default": "./dist/remirror-react.esm.js"
     },
     "./package.json": "./package.json",
-    "./playground": {
-      "import": "./playground/dist/remirror-react-playground.esm.js",
-      "require": "./playground/dist/remirror-react-playground.cjs.js",
-      "browser": "./playground/dist/remirror-react.browser.esm.js",
-      "default": "./playground/dist/remirror-react-playground.esm.js"
-    },
     "./types/*": "./dist/declarations/src/*.d.ts"
   },
   "main": "dist/remirror-react.cjs.js",
@@ -34,23 +28,22 @@
   },
   "types": "dist/remirror-react.cjs.d.ts",
   "files": [
-    "dist",
-    "playground"
+    "dist"
   ],
   "dependencies": {
     "@babel/runtime": "^7.13.10",
-    "@remirror/extension-placeholder": "^1.0.1",
-    "@remirror/extension-positioner": "^1.0.1",
-    "@remirror/extension-react-component": "^1.0.1",
-    "@remirror/extension-react-ssr": "^1.0.1",
-    "@remirror/extension-react-tables": "^1.0.1",
-    "@remirror/preset-react": "^1.0.1",
-    "@remirror/react-components": "^1.0.1",
-    "@remirror/react-core": "^1.0.1",
-    "@remirror/react-hooks": "^1.0.1",
-    "@remirror/react-renderer": "^1.0.1",
-    "@remirror/react-ssr": "^1.0.1",
-    "@remirror/react-utils": "^1.0.1"
+    "@remirror/extension-placeholder": "^1.0.2",
+    "@remirror/extension-positioner": "^1.1.0",
+    "@remirror/extension-react-component": "^1.0.4",
+    "@remirror/extension-react-ssr": "^1.0.3",
+    "@remirror/extension-react-tables": "^1.0.5",
+    "@remirror/preset-react": "^1.0.2",
+    "@remirror/react-components": "^1.0.4",
+    "@remirror/react-core": "^1.0.4",
+    "@remirror/react-hooks": "^1.0.4",
+    "@remirror/react-renderer": "^1.0.4",
+    "@remirror/react-ssr": "^1.0.3",
+    "@remirror/react-utils": "^1.0.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.14",
@@ -77,8 +70,7 @@
   },
   "preconstruct": {
     "entrypoints": [
-      "index.ts",
-      "playground.ts"
+      "index.ts"
     ]
   },
   "rn:dev": "src/index.ts"

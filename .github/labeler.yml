@@ -1,8 +1,5 @@
 # Documentation is available here https://github.com/actions/labeler
 
-'type: deprecation :wastebasket:':
-  - any: ['support/deprecated/**/*']
-
 'type: ci :evergreen_tree:':
   - any:
       [
@@ -37,7 +34,6 @@
   - any:
       [
         'packages/{remirror,@remirror}/**/*.{ts,tsx,json}',
-        '!packages/remirror__playground/**/*',
         '!packages/remirror__cli/**/*',
         '**/*.spec.{ts,tsx}',
       ]
@@ -66,9 +62,6 @@
         '!**/*.spec.{ts,tsx}',
       ]
 
-'type: playground :joystick:':
-  - any: ['packages/remirror__playground/**/*.{ts,tsx,json}', 'website/src/pages/playground.tsx']
-
 'type: docs :pencil:':
   - any: ['docs/**/*.{md.mdx}', '**/readme.{md,mdx}']
 
@@ -82,12 +75,4 @@
   - any: ['**/*.e2e.test.{ts,tsx}', 'packages/**/*.snap', 'test/**/*.{ts,tsx,json,snap}']
 
 'type: support :books:':
-  - any:
-      [
-        'support/**/*',
-        '!website/src/pages/playground.tsx',
-        '!test/**',
-        '!support/actions/**',
-        '!support/azure/**',
-        '!support/deprecated/**',
-      ]
+  - any: ['support/**/*', '!test/**', '!support/actions/**', '!support/azure/**']

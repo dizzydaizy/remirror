@@ -1,5 +1,157 @@
 # @remirror/react-editors
 
+## 0.1.0
+
+> 2021-08-26
+
+### Minor Changes
+
+- Add pre-packaged editors
+
+  Remirror makes building editors simple. Yet, some developers just want to have a out-of-the-box editor that can be plugged into their application. For this, we provide the pre-packaged editors.
+
+### Patch Changes
+
+- Add a `helpers` property to the `BasePositionerProps`. This will make it easier to use preconfigured helpers in the positioners.
+
+- Updated dependencies []:
+  - remirror@1.0.14
+  - @remirror/react@1.0.5
+
+## 0.0.14
+
+> 2021-08-25
+
+### Patch Changes
+
+- Fixes a bug that causes the editor to insert an empty task list when deleting all content in the editor. Closes #1163.
+
+- Updated dependencies []:
+  - remirror@1.0.13
+
+## 0.0.13
+
+> 2021-08-22
+
+### Patch Changes
+
+- Exports `remirror/styles`.
+
+- Updated dependencies []:
+  - remirror@1.0.12
+
+## 0.0.12
+
+> 2021-08-22
+
+### Patch Changes
+
+- Set `sideEffect` from `@remirror/i18n`'s package.json as true.
+
+* Exports `remirror/styles`.
+
+* Updated dependencies []:
+  - remirror@1.0.11
+  - @remirror/react@1.0.4
+
+## 0.0.11
+
+> 2021-08-20
+
+### Patch Changes
+
+- Fix eager parsing of style attribute, and limit valid `line-height` values in `NodeFormattingExtension`
+
+- Updated dependencies []:
+  - remirror@1.0.10
+
+## 0.0.10
+
+> 2021-08-18
+
+### Patch Changes
+
+- Remove the playground API from `remirror`.
+
+* Update dependency `prosemirror-gapcursor` to `^1.1.5`.
+
+- Remove the playground API from `@remirror/react`.
+
+- Updated dependencies []:
+  - remirror@1.0.9
+  - @remirror/pm@1.0.2
+  - @remirror/react@1.0.3
+
+## 0.0.9
+
+> 2021-08-18
+
+### Patch Changes
+
+- Publish a version of `@remirror/extension-node-formatting` without code modification.
+
+- Updated dependencies []:
+  - remirror@1.0.8
+
+## 0.0.8
+
+> 2021-08-18
+
+### Patch Changes
+
+- Updated dependencies [[`937c3332d`](https://github.com/remirror/remirror/commit/937c3332d11ff28f5c218e3ed77a85b4a817b067)]:
+  - remirror@1.0.7
+
+## 0.0.7
+
+> 2021-08-13
+
+### Patch Changes
+
+- Updated dependencies [[`662edfdaa`](https://github.com/remirror/remirror/commit/662edfdaa6ab7954edd4946b6f06da6d36288042)]:
+  - remirror@1.0.6
+
+## 0.0.6
+
+> 2021-08-08
+
+### Patch Changes
+
+- Updated dependencies [[`1d83e4fde`](https://github.com/remirror/remirror/commit/1d83e4fde5a92b68b68d4b1a8e2260b4a985b3cd)]:
+  - remirror@1.0.5
+
+## 0.0.5
+
+> 2021-08-04
+
+### Patch Changes
+
+- Updated dependencies [[`ec998d82b`](https://github.com/remirror/remirror/commit/ec998d82b5f2926b4d1eb36eb62d0557aab8fe4b)]:
+  - remirror@1.0.4
+
+## 0.0.4
+
+> 2021-07-26
+
+### Patch Changes
+
+- Updated dependencies [[`ecad7e4be`](https://github.com/remirror/remirror/commit/ecad7e4beed04778de8060b06c93c8e893d73ed2)]:
+  - remirror@1.0.3
+
+## 0.0.3
+
+> 2021-07-21
+
+### Patch Changes
+
+- [#1010](https://github.com/remirror/remirror/pull/1010) [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b) Thanks [@ifiokjr](https://github.com/ifiokjr)! - Add support for `react@18` in peer dependencies.
+
+- Updated dependencies [[`22115ea9e`](https://github.com/remirror/remirror/commit/22115ea9ed1977d20b7019d065d6a31d39b359eb), [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b), [`0464a6810`](https://github.com/remirror/remirror/commit/0464a68101bc4f64fe31a87dbba937008e17358b)]:
+  - @remirror/react@1.0.2
+  - create-context-state@1.0.1
+  - @remirror/styles@1.0.1
+  - remirror@1.0.2
+
 ## 0.0.2
 
 > 2021-07-17

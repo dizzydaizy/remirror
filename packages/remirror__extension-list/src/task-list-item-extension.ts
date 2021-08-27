@@ -2,6 +2,7 @@ import {
   ApplySchemaAttributes,
   command,
   CommandFunction,
+  ExtensionPriority,
   ExtensionTag,
   findParentNodeOfType,
   getMatchString,
@@ -60,6 +61,9 @@ export class TaskListItemExtension extends NodeExtension {
               ...extra.parse(node),
             };
           },
+
+          // Make sure it has higher priority then ListItemExtension's parseDOM by default
+          priority: ExtensionPriority.Medium,
         },
         ...(override.parseDOM ?? []),
       ],
@@ -95,7 +99,11 @@ export class TaskListItemExtension extends NodeExtension {
       const extraAttrs: Record<string, string> = node.attrs.checked
         ? { 'data-task-list-item': '', 'data-checked': '' }
         : { 'data-task-list-item': '' };
-      return createCustomMarkListItemNodeView({ mark: checkbox, extraAttrs });
+      return createCustomMarkListItemNodeView({
+        view: this.store.view,
+        mark: checkbox,
+        extraAttrs,
+      });
     };
   }
 
