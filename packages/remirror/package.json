@@ -136,7 +136,7 @@
     "@types/codemirror": "^0.0.108",
     "@types/refractor": "^3",
     "codemirror": "^5.60.0",
-    "refractor": "^3.3.1",
+    "refractor": "^4.5.0",
     "yjs": "^13.5.5"
   },
   "devDependencies": {
