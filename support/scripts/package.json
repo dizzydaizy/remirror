@@ -47,7 +47,7 @@
     "@linaria/babel-preset": "^3.0.0-beta.2",
     "@lingui/core": "^3.8.9",
     "@manypkg/get-packages": "^1.1.1",
-    "@microsoft/api-extractor": "^7.13.5",
+    "@microsoft/api-extractor": "^8.0.0",
     "@remirror/core-helpers": "1.0.0-next.60",
     "@remirror/icons": "0.0.0",
     "@remirror/playground": "1.0.0-next.60",
@@ -103,7 +103,7 @@
     "ts-dedent": "^2.1.1",
     "tslog": "^3.1.2",
     "type-fest": "^1.0.2",
-    "verdaccio": "^4.12.0",
+    "verdaccio": "^5.19.0",
     "write-json-file": "^4.3.0"
   },
   "publishConfig": {
