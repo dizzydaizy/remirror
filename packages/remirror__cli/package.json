@@ -65,7 +65,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "terminal-link": "^2.1.1",
     "typanion": "^3.3.0",
-    "update-notifier": "^5.1.0"
+    "update-notifier": "^6.0.0"
   },
   "devDependencies": {
     "@remirror/core-types": "1.0.0-next.60",
